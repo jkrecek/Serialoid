@@ -66,19 +66,10 @@ void Bot::handleReceivedMessage(const Message& message)
         {
             if (commands[2] == NEXT)
             {
-                if (Season* season = series->GetCurrentSeason())
+                if (Episode* nextEp = series->GetNextEpisode())
                 {
-                    EpisodeMap& epM = season->GetEpisodes();
                     server_m->sendMessageToChannel(message.senderChannel(), ".:"+series->GetMainTitle()+" - next episode:.");
-                    foreach(Episode* episode, epM)
-                    {
-                        if (episode && !episode->GetAir().passed())
-                        {
-                            server_m->sendMessageToChannel(message.senderChannel(), episode->GetAirString());
-                            break;
-                        }
-                    }
-                    return;
+                    server_m->sendMessageToChannel(message.senderChannel(), nextEp->GetAirString());
                 }
             }
             else if (commands[2] == INFO)

@@ -20,7 +20,6 @@ class Series
             foreach(QString s, l)
                 seriesTitles_m.push_back(s.trimmed());
         }
-        void SetCurrentSeason(uint c) { currentSeason_m = c; }
 
         SeasonMap& GetSeasons() { return lSeasons_m; }
         Season* GetSeason(uint Id) const { return lSeasons_m.contains(Id) ? lSeasons_m[Id] : NULL; }
@@ -28,8 +27,6 @@ class Series
         QString GetMainTitle() const { return seriesTitles_m.empty() ? seriesName_m.trimmed() : seriesTitles_m.first().trimmed(); }
         QString GetName() const { return seriesName_m; }
         QString GetInfo() const { return info_m; }
-        uint GetCurrentSeasonId() const { return currentSeason_m; }
-        Season* GetCurrentSeason() const { return currentSeason_m && lSeasons_m.contains(currentSeason_m) ? lSeasons_m[currentSeason_m] : NULL; }
         Episode* GetEpisodeByOrder(EpisodeOrder order)
         {
             if (order.isSet())
@@ -38,9 +35,18 @@ class Series
 
             return NULL;
         }
+        Episode* GetNextEpisode() const
+        {
+            if (!lSeasons_m.isEmpty())
+                foreach(Season* season, lSeasons_m)
+                    if (!season->GetEpisodes().isEmpty())
+                        foreach(Episode* episode, season->GetEpisodes())
+                            if (episode && !episode->GetAir().passed())
+                                return episode;
+            return NULL;
+        }
 
     private:
-        uint currentSeason_m;
         QString seriesName_m;
         QStringList seriesTitles_m;
         QString info_m;

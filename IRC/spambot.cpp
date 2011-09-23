@@ -15,12 +15,13 @@
 #include "user.h"
 
 #define ROUTE_SERIES_FILE "C://series.txt"
+#define ROUTE_PROFILE_FILE "C://profile.txt"
 #define ROUTE_ERROR_FILE "C://error.txt"
 
 Bot::Bot(QObject* parent) : QObject(parent)
 {
-    SeriesParser parser(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE);
-    lSeries_m = parser.lSeries_m;
+    SeriesParser(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE, lSeries_m);
+    profileMgr = new ProfileMgr(ROUTE_PROFILE_FILE, ROUTE_ERROR_FILE, lSeries_m);
 
     // connecting to servers
     server_m = new IRCServer("irc.rizon.net", 6667);
@@ -93,6 +94,50 @@ void Bot::handleReceivedMessage(const Message& message)
                     server_m->sendMessageToChannel(message.senderChannel(), episode->GetInfo());
                     server_m->sendMessageToChannel(message.senderChannel(), "---!!! SPOILER ALERT !!!---");
                 }
+            }
+        }
+    }
+    else if (commands[0] == PROFILE)
+    {
+        // profile add spammca himym
+        if (commands[1] == "add")
+        {
+            if (commands.size() > 3)
+            {
+                QString& profileName = commands[2];
+                if (profileMgr->isNameForbidden(profileName))
+                {
+                    server_m->sendMessageToChannel(message.senderChannel(), "You cannot use profile name "+profileName+". Such name is forbidden!");
+                    return;
+                }
+                Profile* profile = profileMgr->GetProfile(profileName);
+                if (!profile)
+                {
+                    profile = new Profile(profileName);
+                    profile->SetSeries(message.content().mid(message.content().indexOf(commands[3])), lSeries_m);
+                    profileMgr->AddProfile(profile);
+
+                    QString s;
+                    foreach(Series* series, profile->GetProfileSeries())
+                    {
+                        if (!s.isEmpty())
+                            s.append(", ");
+
+                        s.append(series->GetMainTitle()+"("+series->GetName()+")");
+                    }
+                    server_m->sendMessageToChannel(message.senderChannel(), "Succesfully added profile '"+profileName+"' containing series: "+s);
+                }
+                else
+                    server_m->sendMessageToChannel(message.senderChannel(), "Profile already exists!");
+            }
+        }
+        else if (Profile* profile = profileMgr->GetProfile(commands[1]))
+        {
+            if (commands[2] == "next")
+            {
+                foreach(Series* series, profile->GetProfileSeries())
+                    if (Episode* ep = series->GetNextEpisode())
+                        server_m->sendMessageToChannel(message.senderChannel(), series->GetMainTitle()+": "+ep->GetAirString());
             }
         }
     }

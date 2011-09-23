@@ -5,10 +5,12 @@
 #include <QObject>
 #include <QStringList>
 #include "message.h"
+#include "profilemgr.h"
 #include "series.h"
 #include "user.h"
 
 class IRCServer;
+class ProfileMgr;
 
 typedef QMap<QString, Series*> SeriesMap;
 
@@ -32,6 +34,8 @@ class Bot : public QObject
         void HandleTimeComparison(QString channel, QStringList qStrList);
 
         IRCServer* server_m;
+        ProfileMgr* profileMgr;
+
         SeriesMap lSeries_m;
 };
 #endif

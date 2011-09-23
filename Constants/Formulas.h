@@ -10,6 +10,7 @@
 
 #define COMPARE "compare"
 #define SERIES "series"
+#define PROFILE "profile"
 #define LIST "list"
 #define NEXT "next"
 #define INFO "info"

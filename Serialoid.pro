@@ -1,7 +1,7 @@
 QT += network
 CONFIG += console
 TEMPLATE = app
-INCLUDEPATH += Constants Helper IRC Series
+INCLUDEPATH += Constants Helper IRC Series Profile
 HEADERS += Constants/ircconstants.h \
     Constants/Formulas.h \
     Helper/timestamp.h \
@@ -15,7 +15,9 @@ HEADERS += Constants/ircconstants.h \
     IRC/channel.h \
     Series/series.h \
     Series/season.h \
-    Series/episode.h
+    Series/episode.h \
+    Profile/profilemgr.h \
+    Profile/profile.h
 
 SOURCES += main.cpp \
     Helper/timestamp.cpp \
@@ -25,4 +27,5 @@ SOURCES += main.cpp \
     IRC/spambot.cpp \
     IRC/message.cpp \
     IRC/ircserver.cpp \
-    IRC/channel.cpp
+    IRC/channel.cpp \
+    Profile/profilemgr.cpp

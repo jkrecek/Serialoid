@@ -3,7 +3,8 @@
 #include "Formulas.h"
 #include "seriesparser.h"
 
-SeriesParser::SeriesParser(QString _setting, QString _error) : error_m(_error)
+SeriesParser::SeriesParser(QString _setting, QString _error, SeriesMap& _lSeries) :
+    error_m(_error), lSeries_m(_lSeries)
 {
     QFile file(_setting);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -144,6 +145,6 @@ void SeriesParser::writeError(QString error)
         return;
 
     QTextStream stream(&file);
-    stream << "ERROR: " << Timestamp().write(FORMAT_TIME_DATE) << " " << error << endl;
+    stream << "ERROR(series parser): " << Timestamp().write(FORMAT_TIME_DATE) << " " << error << endl;
     file.close();
 }

@@ -1,0 +1,24 @@
+// server on bot should connect
+server = irc.rizon.net
+// port of server
+port = 6667
+// bot nick
+nick = Pirate
+// bot username
+user = Bot
+// pass to nickserv
+pass = unknown
+// channels to join upon
+channels = #valhalla
+// banning after x kicks, 0 for disable
+banning = 3
+// kick after x same messages, 0 for disable
+same_messages = 4
+// kick after x same from same user, 0 for disable
+same_user = 12
+// allow kick command
+kick_comm_alow = 1
+// kick command
+kick_comm = !kick
+// shown version of bot
+version = 3.0

@@ -71,28 +71,46 @@ void Bot::handleReceivedMessage(const Message& message)
                     server_m->sendMessageToChannel(message.senderChannel(), ".:"+series->GetMainTitle()+" - next episode:.");
                     server_m->sendMessageToChannel(message.senderChannel(), nextEp->GetAirString());
                 }
+                else
+                    server_m->sendMessageToChannel(message.senderChannel(), "No more episodes to be aired for series "+series->GetMainTitle()+"!");
             }
             else if (commands[2] == INFO)
             {
-                server_m->sendMessageToChannel(message.senderChannel(), ".:"+series->GetMainTitle()+" - info:.");
-                server_m->sendMessageToChannel(message.senderChannel(), series->GetInfo());
-                return;
+                if (!series->GetInfo().isEmpty())
+                {
+                    server_m->sendMessageToChannel(message.senderChannel(), ".:"+series->GetMainTitle()+" - info:.");
+                    server_m->sendMessageToChannel(message.senderChannel(), series->GetInfo());
+                }
+                else
+                    server_m->sendMessageToChannel(message.senderChannel(), "No info for series "+series->GetMainTitle()+" found!");
             }
 
             else if (commands[2] == TITLES)
             {
                 QString known = series->GetTitles().join(", ");
-                server_m->sendMessageToChannel(message.senderChannel(), "Known titles for series with codename '"+series->GetName()+"': "+known);
+                if (!known.isEmpty())
+                    server_m->sendMessageToChannel(message.senderChannel(), "Known titles for series with codename '"+series->GetName()+"': "+known);
+                else
+                    server_m->sendMessageToChannel(message.senderChannel(), "Series is known only by its codename '"+series->GetName()+"'");
             }
-            else if (Episode* episode = series->GetEpisodeByOrder(commands[2]))
+            else
             {
-                server_m->sendMessageToChannel(message.senderChannel(), episode->GetAirString());
-                if (commands.size() == 4 && commands[3] == "info")
+                EpisodeOrder epOrder(commands[2]);
+                if (!epOrder.isSet())
+                    return;
+
+                if (Episode* episode = series->GetEpisodeByOrder(epOrder))
                 {
-                    server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
-                    server_m->sendMessageToUser(message.senderNick(), episode->GetInfo());
-                    server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
+                    server_m->sendMessageToChannel(message.senderChannel(), episode->GetAirString());
+                    if (commands.size() == 4 && commands[3] == "info")
+                    {
+                        server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
+                        server_m->sendMessageToUser(message.senderNick(), episode->GetInfo());
+                        server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
+                    }
                 }
+                else
+                    server_m->sendMessageToChannel(message.senderChannel(), "Episode "+epOrder.GetNormalLook()+" not found!");
             }
         }
     }

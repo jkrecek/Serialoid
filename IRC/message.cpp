@@ -1,6 +1,5 @@
-#include "message.h"
-
 #include "ircconstants.h"
+#include "message.h"
 
 Message::Message() :
     command_m(QString()),

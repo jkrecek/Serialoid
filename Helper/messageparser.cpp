@@ -1,11 +1,10 @@
-#include "messageparser.h"
-#include "ircconstants.h"
-#include "Formulas.h"
-#include "timestamp.h"
-#include <QTextCodec>
-#include <QStringList>
 #include <QDebug>
-
+#include <QStringList>
+#include <QTextCodec>
+#include "Formulas.h"
+#include "ircconstants.h"
+#include "messageparser.h"
+#include "timestamp.h"
 
 MessageParser::MessageParser()
 {

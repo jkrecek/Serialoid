@@ -1,8 +1,8 @@
 #ifndef SERIES_H
 #define SERIES_H
 
-#include <QStringList>
 #include <QMap>
+#include <QStringList>
 #include "episode.h"
 #include "season.h"
 

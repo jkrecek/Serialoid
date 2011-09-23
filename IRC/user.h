@@ -1,11 +1,10 @@
 #ifndef USER_H
 #define USER_H
 
-#include <QString>
-#include "message.h"
-#include <QStringList>
 #include <QList>
 #include <QMap>
+#include <QStringList>
+#include "message.h"
 
 class IRCServer;
 

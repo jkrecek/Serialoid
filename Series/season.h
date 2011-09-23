@@ -1,9 +1,8 @@
 #ifndef SEASON_H
 #define SEASON_H
 
-#include <QStringList>
 #include <QMap>
-
+#include <QStringList>
 #include "episode.h"
 
 typedef QMap<uint, Episode*> EpisodeMap;

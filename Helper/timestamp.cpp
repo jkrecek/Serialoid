@@ -1,6 +1,6 @@
-#include "timestamp.h"
-#include "Formulas.h"
 #include <QDebug>
+#include "Formulas.h"
+#include "timestamp.h"
 
 Timestamp::Timestamp(uint _unix, int _diff) : unix_m(_unix), gmtDiff_m(_diff)
 {

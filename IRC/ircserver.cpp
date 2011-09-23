@@ -1,12 +1,11 @@
-#include "ircserver.h"
-
 #include <QList>
 #include <QTextCodec>
-#include "ircconstants.h"
+#include "Formulas.h"
 #include "channel.h"
+#include "ircconstants.h"
+#include "ircserver.h"
 #include "messageparser.h"
 #include "spambot.h"
-#include "Formulas.h"
 #include "timestamp.h"
 
 IRCServer::IRCServer(const QString& serverAddress, quint16 serverPort, QObject* parent) :

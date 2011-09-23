@@ -1,8 +1,7 @@
-#include "channel.h"
-
 #include <QStringList>
-#include "ircserver.h"
+#include "channel.h"
 #include "ircconstants.h"
+#include "ircserver.h"
 #include "user.h"
 
 Channel::Channel(const QString& channelName, IRCServer* server) :

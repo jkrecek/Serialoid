@@ -1,8 +1,7 @@
-#include "user.h"
 #include "ircserver.h"
 #include "message.h"
 #include "spambot.h"
-//class Bot;
+#include "user.h"
 
 User::User(IRCServer* server) :
     server_m(server)

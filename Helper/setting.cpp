@@ -1,6 +1,6 @@
-#include "setting.h"
-#include "Formulas.h"
 #include <QDebug>
+#include "Formulas.h"
+#include "setting.h"
 
 Setting::Setting(QString fileName)
 {

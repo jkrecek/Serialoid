@@ -1,6 +1,8 @@
 #ifndef IRCCONSTANTS_H
 #define IRCCONSTANTS_H
 
+#include <QString>
+
 namespace IRC
 {
     namespace Command
@@ -14,7 +16,7 @@ namespace IRC
         static const QString Topic = "TOPIC";
         static const QString Error = "ERROR";
         static const QString Mode = "MODE";
-    };
+    }
 
     namespace Reply
     {
@@ -24,7 +26,7 @@ namespace IRC
         static const QString NAMREPLY = "353";
         static const QString NICKTAKEN = "433";
         static const QString BANNED = "474";
-    };
+    }
 
     static const QString MessagePrefix = ":";
     static const QString UserPrefix = "!";
@@ -32,6 +34,6 @@ namespace IRC
     static const QString UserIdentifyPrefix = "USER";
     static const QString NickIdentifyPrefix = "NICK";
     static const QString PassIdentifyPrefix = "PASS";
-};
+}
 
 #endif // IRCCONSTANTS_H

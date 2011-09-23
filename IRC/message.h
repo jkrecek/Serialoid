@@ -1,12 +1,9 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
+#include <ctime>
 #include <QString>
 #include "ircconstants.h"
-#include <ctime>
-//#include "user.h"
-
-
 
 struct Message
 {

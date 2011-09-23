@@ -1,10 +1,9 @@
 #ifndef CHANNEL_H
 #define CHANNEL_H
 
-#include <QObject>
-
-#include <QString>
 #include <QMap>
+#include <QObject>
+#include <QString>
 #include "message.h"
 
 class IRCServer;

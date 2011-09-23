@@ -1,12 +1,12 @@
 #ifndef SPAMBOT_H
 #define SPAMBOT_H
 
-#include <QObject>
-#include "message.h"
-#include "user.h"
-#include "series.h"
-#include <QStringList>
 #include <QMap>
+#include <QObject>
+#include <QStringList>
+#include "message.h"
+#include "series.h"
+#include "user.h"
 
 class IRCServer;
 

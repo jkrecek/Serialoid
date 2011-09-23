@@ -1,20 +1,18 @@
-#include "spambot.h"
-#include "ircserver.h"
-#include "user.h"
-#include "channel.h"
-#include "ircconstants.h"
-#include "spambot.h"
-#include "Formulas.h"
-#include "episode.h"
-#include "episodeorder.h"
-#include "setting.h"
-
-#include <QStringList>
+#include <ctime>
+#include <iostream>
+#include <math.h>
 #include <QDebug>
 #include <QFile>
-#include <iostream>
-#include <ctime>
-#include <math.h>
+#include <QStringList>
+#include "episode.h"
+#include "episodeorder.h"
+#include "Formulas.h"
+#include "channel.h"
+#include "ircconstants.h"
+#include "ircserver.h"
+#include "setting.h"
+#include "spambot.h"
+#include "user.h"
 
 Bot::Bot(QObject* parent) : QObject(parent)
 {

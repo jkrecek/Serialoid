@@ -1,9 +1,9 @@
 #ifndef SETTING_H
 #define SETTING_H
 
-#include <QStringList>
-#include <QMap>
 #include <QFile>
+#include <QMap>
+#include <QStringList>
 #include "spambot.h"
 
 struct Setting

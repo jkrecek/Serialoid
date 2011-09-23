@@ -1,9 +1,9 @@
 #ifndef IRCSERVER_H
 #define IRCSERVER_H
 
+#include <QHostAddress>
 #include <QObject>
 #include <QTcpSocket>
-#include <QHostAddress>
 #include "message.h"
 #include "spambot.h"
 
@@ -15,7 +15,7 @@ enum Bans
     BAN_NONE            = 0x00,
     BAN_NICK            = 0x01,
     BAN_USER            = 0x02,
-    BAN_HOST            = 0x04,
+    BAN_HOST            = 0x04
 };
 
 #define MESSAGE_MAX 471

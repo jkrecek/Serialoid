@@ -20,6 +20,11 @@ class Episode
         Timestamp GetAir() const            { return Air_m; }
 
         QString GetOrderString() const      { return Order_m.GetNormalLook(); }
+        QString GetAirString() const
+        {
+            QString air = Air_m.passed() ? "was aired" : "will be aired in "+Air_m.getTo();
+            return GetOrderString()+" \""+Name_m+"\" "+air+" at "+Air_m.write(FORMAT_DAY_S_TIME_DATE_GMT);
+        }
 
     private:
         EpisodeOrder Order_m;

@@ -131,6 +131,8 @@ QString Timestamp::write(Format f) const
     {
         case FORMAT_DAY_S_TIME_DATE:    return getDay(3)+" "+getTime()+" "+getDate();
         case FORMAT_DAY_S_DATE_TIME:    return getDay(3)+" "+getDate()+" "+getTime();
+        case FORMAT_DAY_S_TIME_DATE_GMT:return getDay(3)+" "+getTime()+" "+getDate()+" "+writeGMT();
+        case FORMAT_DAY_S_DATE_TIME_GMT:return getDay(3)+" "+getDate()+" "+getTime()+" "+writeGMT();
         case FORMAT_DAY_L_TIME_DATE:    return getDay()+" "+getTime()+" "+getDate();
         case FORMAT_DAY_L_DATE_TIME:    return getDay()+" "+getDate()+" "+getTime();
         case FORMAT_TIME_DATE:          return getTime()+" "+getDate();

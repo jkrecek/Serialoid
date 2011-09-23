@@ -14,7 +14,12 @@ class Series
         Series(QString name) : seriesName_m(name) {}
 
         void SetInfo(QString info) { info_m = info; }
-        void SetTitles(QStringList l) { seriesTitles_m = l; }
+        void SetTitles(QStringList l)
+        {
+            seriesTitles_m.clear();
+            foreach(QString s, l)
+                seriesTitles_m.push_back(s.trimmed());
+        }
         void SetCurrentSeason(uint c) { currentSeason_m = c; }
 
         SeasonMap& GetSeasons() { return lSeasons_m; }

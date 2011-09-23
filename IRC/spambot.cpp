@@ -90,14 +90,7 @@ void Bot::handleReceivedMessage(const Message& message)
 
             else if (commands[2] == TITLES)
             {
-                QString known;
-                foreach(QString title, series->GetTitles())
-                {
-                    if (!known.isEmpty())
-                        known.append(", ");
-
-                    known.append(title.trimmed());
-                }
+                QString known = series->GetTitles().join(", ");
                 server_m->sendMessageToChannel(message.senderChannel(), "Known titles for series with codename '"+series->GetName()+"': "+known);
             }
             else if (Episode* episode = series->GetEpisodeByOrder(commands[2]))

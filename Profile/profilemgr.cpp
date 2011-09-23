@@ -17,9 +17,9 @@ ProfileMgr::ProfileMgr(QString _fileName, QString _errorFileName, SeriesMap& _se
             continue;
 
         QStringList linePart = line.split(" ");
-        if (linePart.size() < 2)
+        if (linePart.size() < 3)
         {
-            writeError("Line '"+line+"' cannot have size less then 2");
+            writeError("Line '"+line+"' cannot have size less then 3");
             continue;
         }
         QString& profileName = linePart[0];
@@ -30,6 +30,7 @@ ProfileMgr::ProfileMgr(QString _fileName, QString _errorFileName, SeriesMap& _se
         }
 
         Profile* profile = new Profile(profileName);
+        profile->SetPassHash(linePart[1]);
         profile->SetSeries(line.split("\"")[1], lSeries_m);
         lProfiles_m[profileName] = profile;
     }
@@ -50,7 +51,7 @@ void ProfileMgr::_save()
         if (profile->GetProfileSeries().isEmpty())
             continue;
 
-        out << profile->GetName() << " \"";
+        out << profile->GetName() << " " << profile->GetPassHash() << " \"";
 
         bool first = true;
         foreach(Series* series, profile->GetProfileSeries())
@@ -76,7 +77,7 @@ void ProfileMgr::AddProfile(Profile* prof)
 bool ProfileMgr::isNameForbidden(QString profileName) const
 {
     return profileName.startsWith("profile") || profileName.startsWith("add") ||
-           profileName.contains("\"") || profileName.contains(",");
+            profileName.contains("\"") || profileName.contains(",") || profileName.contains("*");
 }
 
 void ProfileMgr::writeError(QString error)

@@ -1,7 +1,6 @@
 #ifndef PROFILEMGR_H
 #define PROFILEMGR_H
 
-#include <QDebug>
 #include <QMap>
 #include <QStringList>
 #include "profile.h"
@@ -20,6 +19,8 @@ class ProfileMgr
         void writeError(QString error);
         Profile* GetProfile(QString name) const { return lProfiles_m.value(name); }
         void AddProfile(Profile* prof);
+
+        void Save() { _save(); }
 
     private:
         void _save();

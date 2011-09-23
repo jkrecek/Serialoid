@@ -2,6 +2,7 @@
 #define FORMULAS_H
 
 #include <QStringList>
+#include <QCryptographicHash>
 #include <time.h>
 
 #define FIRST_YEAR 1970
@@ -56,6 +57,25 @@ inline uint GetDaysForYear(int year)
 inline bool isInRange(int min, int val, int max)
 {
     return min <= val && val <= max;
+}
+
+inline QString getHashFor(QString pass)
+{
+    QCryptographicHash hash(QCryptographicHash::Sha1);
+    hash.addData(pass.toStdString().c_str(), pass.size());
+    return hash.result().toHex();
+}
+
+inline bool isSha1Hash(QString hash)
+{
+    QByteArray arr = hash.toUtf8();
+    if (arr.size() != 40)
+        return false;
+
+    if (arr.contains(" "))
+        return false;
+
+    return true;
 }
 
 #endif // FORMULAS_H

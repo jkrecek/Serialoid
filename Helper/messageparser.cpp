@@ -1,4 +1,3 @@
-#include <QDebug>
 #include <QStringList>
 #include <QTextCodec>
 #include "Formulas.h"

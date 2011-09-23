@@ -1,7 +1,6 @@
 #include <ctime>
 #include <iostream>
 #include <math.h>
-#include <QDebug>
 #include <QFile>
 #include <QStringList>
 #include "episode.h"
@@ -25,7 +24,7 @@ Bot::Bot(QObject* parent) : QObject(parent)
 
     // connecting to servers
     server_m = new IRCServer("irc.rizon.net", 6667);
-    server_m->connectAs("Serijaloid", "BOT", "BOT", "Kurva_tahnite_mi_z_nicku");
+    server_m->connectAs("Serialoid", "BOT", "BOT", "Kurva_tahnite_mi_z_nicku");
 
     server_m->joinChannel("#valhalla");
 
@@ -99,12 +98,16 @@ void Bot::handleReceivedMessage(const Message& message)
     }
     else if (commands[0] == PROFILE)
     {
-        // profile add spammca himym
         if (commands[1] == "add")
         {
             if (commands.size() > 3)
             {
                 QString& profileName = commands[2];
+                if (profileName.isEmpty())
+                {
+                    server_m->sendMessageToChannel(message.senderChannel(), "Profile name cannot be empty!");
+                    return;
+                }
                 if (profileMgr->isNameForbidden(profileName))
                 {
                     server_m->sendMessageToChannel(message.senderChannel(), "You cannot use profile name "+profileName+". Such name is forbidden!");
@@ -133,13 +136,84 @@ void Bot::handleReceivedMessage(const Message& message)
         }
         else if (Profile* profile = profileMgr->GetProfile(commands[1]))
         {
+            if (commands.size() < 3)
+                return;
+
             if (commands[2] == "next")
             {
+                if (commands.size() != 3)
+                    return;
+
                 foreach(Series* series, profile->GetProfileSeries())
                     if (Episode* ep = series->GetNextEpisode())
                         server_m->sendMessageToChannel(message.senderChannel(), series->GetMainTitle()+": "+ep->GetAirString());
             }
+            else if (commands[2] == "pass")
+            {
+                if (commands.size() == 4)
+                {
+                    if (!profile->GetPassHash().isEmpty())
+                    {
+                        server_m->sendMessageToChannel(message.senderChannel(), "Password already set, if you wish to change it please type 'profile "+profile->GetName()+" pass old new'");
+                        return;
+                    }
+
+                    profile->SetPassHash(isSha1Hash(commands[3]) ? commands[3] : getHashFor(commands[3]));
+                    server_m->sendMessageToChannel(message.senderChannel(), "Password succesfully set!");
+                }
+                else if (commands.size() == 5)
+                {
+                    if (profile->GetPassHash().isEmpty())
+                    {
+                        server_m->sendMessageToChannel(message.senderChannel(), "Cannot change password when none is set!");
+                        return;
+                    }
+
+                    if (!profile->IsPassCorrect(commands[3]))
+                    {
+                        server_m->sendMessageToChannel(message.senderChannel(), "Wrong password!");
+                        return;
+                    }
+
+                    profile->SetPassHash(isSha1Hash(commands[4]) ? commands[4] : getHashFor(commands[4]));
+                    server_m->sendMessageToChannel(message.senderChannel(), "Password succesfully edited!");
+                }
+                else
+                    return;
+
+                profileMgr->Save();
+            }
+            else if (commands[2] == "edit")
+            {
+                if (commands.size() < 5)
+                    return;
+
+                if (!profile->IsPassCorrect(commands[3]))
+                {
+                    server_m->sendMessageToChannel(message.senderChannel(), "Wrong password!");
+                    return;
+                }
+
+                profile->SetSeries(message.content().mid(message.content().indexOf(commands[4])), lSeries_m);
+
+                QString s;
+                foreach(Series* series, profile->GetProfileSeries())
+                {
+                    if (!s.isEmpty())
+                        s.append(", ");
+
+                    s.append(series->GetMainTitle()+"("+series->GetName()+")");
+                }
+                server_m->sendMessageToChannel(message.senderChannel(), "Succesfully edited profile '"+profile->GetName()+"' containing series: "+s);
+            }
         }
+    }
+    else if (commands[0] == "hash")
+    {
+        if (commands.size() != 2)
+            return;
+
+        server_m->sendMessageToChannel(message.senderChannel(), getHashFor(commands[1]));
     }
 
     if (message.senderNick() == server_m->ownNick() && message.content() == "quit")
@@ -155,6 +229,9 @@ void Bot::handleReceivedMessage(const Message& message)
 
 void Bot::HandleTimeComparison(QString channel, QStringList qStrList)
 {
+    if (qStrList.size() != 3)
+        return;
+
     Timestamp stamp(qStrList[1], qStrList[2]);
     server_m->sendMessageToChannel(channel, "Unix time for timestamp "+stamp.write(FORMAT_TIME_DATE)+" is "+stamp.write(FORMAT_UNIX)+" at actual time ");
     server_m->sendMessageToChannel(channel, "Current timestamp is UNIX:"+Timestamp().write(FORMAT_UNIX)+" STAMP:"+Timestamp().write(FORMAT_TIME_DATE));

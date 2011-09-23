@@ -1,4 +1,3 @@
-#include <QDebug>
 #include <QTextStream>
 #include "Formulas.h"
 #include "seriesparser.h"

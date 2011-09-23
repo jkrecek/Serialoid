@@ -5,7 +5,7 @@ INCLUDEPATH += Constants Helper IRC Series
 HEADERS += Constants/ircconstants.h \
     Constants/Formulas.h \
     Helper/timestamp.h \
-    Helper/setting.h \
+    Helper/seriesparser.h \
     Helper/messageparser.h \
     Helper/episodeorder.h \
     IRC/user.h \
@@ -19,7 +19,7 @@ HEADERS += Constants/ircconstants.h \
 
 SOURCES += main.cpp \
     Helper/timestamp.cpp \
-    Helper/setting.cpp \
+    Helper/seriesparser.cpp \
     Helper/messageparser.cpp \
     IRC/user.cpp \
     IRC/spambot.cpp \

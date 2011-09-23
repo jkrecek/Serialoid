@@ -1,9 +1,9 @@
 #include <QDebug>
 #include <QTextStream>
 #include "Formulas.h"
-#include "setting.h"
+#include "seriesparser.h"
 
-Setting::Setting(QString _setting, QString _error) : error_m(_error)
+SeriesParser::SeriesParser(QString _setting, QString _error) : error_m(_error)
 {
     QFile file(_setting);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -18,7 +18,7 @@ Setting::Setting(QString _setting, QString _error) : error_m(_error)
     }
 }
 
-void Setting::HandleSetting(QString line)
+void SeriesParser::HandleSetting(QString line)
 {
     QStringList setting = line.split(" ", QString::SkipEmptyParts);
     if (setting.empty())
@@ -155,7 +155,7 @@ void Setting::HandleSetting(QString line)
     }
 }
 
-void Setting::writeError(QString error)
+void SeriesParser::writeError(QString error)
 {
     QFile file(error_m);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))

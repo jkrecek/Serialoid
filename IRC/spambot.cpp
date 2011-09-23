@@ -10,14 +10,17 @@
 #include "channel.h"
 #include "ircconstants.h"
 #include "ircserver.h"
-#include "setting.h"
+#include "seriesparser.h"
 #include "spambot.h"
 #include "user.h"
 
+#define ROUTE_SERIES_FILE "C://series.txt"
+#define ROUTE_ERROR_FILE "C://error.txt"
+
 Bot::Bot(QObject* parent) : QObject(parent)
 {
-    Setting setting("C://settings.txt");
-    lSeries_m = setting.lSeries_m;
+    SeriesParser parser(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE);
+    lSeries_m = parser.lSeries_m;
 
     // connecting to servers
     server_m = new IRCServer("irc.rizon.net", 6667);

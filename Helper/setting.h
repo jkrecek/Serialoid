@@ -8,10 +8,14 @@
 
 struct Setting
 {
-    Setting(QString fileName);
+    Setting(QString _setting, QString _error);
     void HandleSetting(QString line);
     Series* GetSeries(QString name) const { return lSeries_m.contains(name) ? lSeries_m[name] : NULL; }
     SeriesMap lSeries_m;
+    void writeError(QString error);
+
+    private:
+        QString error_m;
 };
 
 #endif // SETTING_H

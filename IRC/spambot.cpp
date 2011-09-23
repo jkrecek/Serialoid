@@ -90,9 +90,9 @@ void Bot::handleReceivedMessage(const Message& message)
                 server_m->sendMessageToChannel(message.senderChannel(), episode->GetAirString());
                 if (commands.size() == 4 && commands[3] == "info")
                 {
-                    server_m->sendMessageToChannel(message.senderChannel(), "---!!! SPOILER ALERT !!!---");
-                    server_m->sendMessageToChannel(message.senderChannel(), episode->GetInfo());
-                    server_m->sendMessageToChannel(message.senderChannel(), "---!!! SPOILER ALERT !!!---");
+                    server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
+                    server_m->sendMessageToUser(message.senderNick(), episode->GetInfo());
+                    server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
                 }
             }
         }

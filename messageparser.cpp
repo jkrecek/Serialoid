@@ -16,7 +16,6 @@ Message MessageParser::receivedRawTextToMessage(const QByteArray& rawText, const
     Message message;
 
     QByteArray trimmedRawText = rawText.trimmed();
-    qDebug() << "RCV: " << Timestamp().write(FORMAT_TIME) << " " << trimmedRawText;
     QString unicodeRawText = decodeRawText(trimmedRawText, defaultCodec);
 
     QStringList messageParts = unicodeRawText.split(' ', QString::SkipEmptyParts);

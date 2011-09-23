@@ -64,8 +64,6 @@ Timestamp::Timestamp(QString _str1, QString _str2, int _diff) : unix_m(0), gmtDi
 
     _unix -= (_diff+IS_DST)*HOUR_S;
 
-    qDebug() << _unix;
-    qDebug() << time(0);
     unix_m = _unix;
 }
 
@@ -147,7 +145,6 @@ QString Timestamp::write(Format f) const
 QString Timestamp::getTo() const
 {
     uint c = timeTo();
-    qDebug() << c;
     uint days = c/86400;
     uint hours = (c/3600)%24;
     uint minutes = (c/60)%60;

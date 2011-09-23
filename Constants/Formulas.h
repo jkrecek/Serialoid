@@ -13,6 +13,7 @@
 #define SERIES "series"
 #define PROFILE "profile"
 #define LIST "list"
+#define RELOAD "reload"
 #define NEXT "next"
 #define INFO "info"
 #define TITLES "titles"

@@ -62,6 +62,11 @@ void Bot::handleReceivedMessage(const Message& message)
             server_m->sendMessageToChannel(message.senderChannel(), known);
             return;
         }
+        else if (commands[1] == RELOAD)
+        {
+            SeriesParser(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE, lSeries_m);
+            server_m->sendMessageToChannel(message.senderChannel(), "Series reloaded succesfully");
+        }
         else if (Series* series = GetSeries(commands[1]))
         {
             if (commands[2] == NEXT)

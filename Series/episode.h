@@ -8,24 +8,24 @@
 class Episode
 {
     public:
-        Episode(uint Id) : Id_m(Id) {}
+        Episode(EpisodeOrder _order) : Order_m(_order) {}
 
-        Timestamp GetAir() const { return air_m; }
-        QString GetName() const { return Name_m; }
-        QString GetEpisodeOrder() const { return Order_m.GetNormalLook(); }
-        QString GetInfo() const { return Info_m; }
-        uint GetId() const { return Id_m; }
+        void SetName(QString str)           { Name_m = str; }
+        void SetInfo(QString str)           { Info_m = str; }
+        void SetAir(Timestamp air)          { Air_m = air; }
 
-        void SetName(QString str) { Name_m = str; }
-        void SetInfo(QString str) { Info_m = str; }
-        void SetAir(Timestamp air) { air_m = air; }
-        void SetEpisodeOrder(EpisodeOrder order) { Order_m = order; }
+        EpisodeOrder GetOrder() const       { return Order_m; }
+        QString GetName() const             { return Name_m; }
+        QString GetInfo() const             { return Info_m; }
+        Timestamp GetAir() const            { return Air_m; }
+
+        QString GetOrderString() const      { return Order_m.GetNormalLook(); }
+
     private:
-        uint Id_m;
         EpisodeOrder Order_m;
         QString Name_m;
         QString Info_m;
-        Timestamp air_m;
+        Timestamp Air_m;
 };
 
 #endif // EPISODE_H

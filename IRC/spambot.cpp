@@ -77,7 +77,7 @@ void Bot::handleReceivedMessage(const Message& message)
                     {
                         if (episode && !episode->GetAir().passed())
                         {
-                            server_m->sendMessageToChannel("#valhalla", ""+episode->GetEpisodeOrder()+" \""+episode->GetName()+"\" will be aired in "+episode->GetAir().getTo()+" (airs at "+episode->GetAir().write(FORMAT_DAY_S_TIME_DATE)+" "+episode->GetAir().writeGMT()+")");
+                            server_m->sendMessageToChannel("#valhalla", ""+episode->GetOrderString()+" \""+episode->GetName()+"\" will be aired in "+episode->GetAir().getTo()+" (airs at "+episode->GetAir().write(FORMAT_DAY_S_TIME_DATE)+" "+episode->GetAir().writeGMT()+")");
                             break;
                         }
                     }
@@ -105,7 +105,7 @@ void Bot::handleReceivedMessage(const Message& message)
             }
             else if (Episode* episode = series->GetEpisodeByOrder(commands[2]))
             {
-                server_m->sendMessageToChannel("#valhalla", "Episode "+episode->GetEpisodeOrder()+" \""+episode->GetName()+"\" "+QString(episode->GetAir().passed() ? "was" : "will be")+" aired at "+episode->GetAir().write(FORMAT_DAY_S_TIME_DATE)+" "/*+GMTLook(episode->GetHourDiff())*/);
+                server_m->sendMessageToChannel("#valhalla", "Episode "+episode->GetOrderString()+" \""+episode->GetName()+"\" "+QString(episode->GetAir().passed() ? "was" : "will be")+" aired at "+episode->GetAir().write(FORMAT_DAY_S_TIME_DATE)+" "/*+GMTLook(episode->GetHourDiff())*/);
                 if (commands.size() == 4 && commands[3] == "info")
                 {
                     server_m->sendMessageToChannel("#valhalla", "---!!! SPOILER ALERT !!!---");

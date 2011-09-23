@@ -29,7 +29,7 @@ class Bot : public QObject
         void handleReceivedMessage(const Message& message);
 
     private:
-        void HandleTimeComparison(QStringList qStrList);
+        void HandleTimeComparison(QString channel, QStringList qStrList);
 
         IRCServer* server_m;
         SeriesMap lSeries_m;

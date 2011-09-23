@@ -45,10 +45,7 @@ void Bot::handleReceivedMessage(const Message& message)
         server_m->joinChannel(message.senderChannel());
 
     if (commands[0] == COMPARE)
-    {
-        HandleTimeComparison(commands);
-        return;
-    }
+        HandleTimeComparison(message.senderChannel(), commands);
     else if (commands[0] == SERIES)
     {
         if (commands[1] == LIST)
@@ -61,8 +58,8 @@ void Bot::handleReceivedMessage(const Message& message)
 
                 known.append(series->GetMainTitle()+" ("+series->GetName()+")");
             }
-            server_m->sendMessageToChannel("#valhalla", ".:Printing all known series ( format Name(codename) ):.");
-            server_m->sendMessageToChannel("#valhalla", known);
+            server_m->sendMessageToChannel(message.senderChannel(), ".:Printing all known series ( format Name(codename) ):.");
+            server_m->sendMessageToChannel(message.senderChannel(), known);
             return;
         }
         else if (Series* series = GetSeries(commands[1]))
@@ -72,7 +69,7 @@ void Bot::handleReceivedMessage(const Message& message)
                 if (Season* season = series->GetCurrentSeason())
                 {
                     EpisodeMap& epM = season->GetEpisodes();
-                    server_m->sendMessageToChannel("#valhalla", ".:"+series->GetMainTitle()+" - next episode:.");
+                    server_m->sendMessageToChannel(message.senderChannel(), ".:"+series->GetMainTitle()+" - next episode:.");
                     foreach(Episode* episode, epM)
                     {
                         if (episode && !episode->GetAir().passed())
@@ -86,8 +83,8 @@ void Bot::handleReceivedMessage(const Message& message)
             }
             else if (commands[2] == INFO)
             {
-                server_m->sendMessageToChannel("#valhalla", ".:"+series->GetMainTitle()+" - info:.");
-                server_m->sendMessageToChannel("#valhalla", series->GetInfo());
+                server_m->sendMessageToChannel(message.senderChannel(), ".:"+series->GetMainTitle()+" - info:.");
+                server_m->sendMessageToChannel(message.senderChannel(), series->GetInfo());
                 return;
             }
 
@@ -101,16 +98,16 @@ void Bot::handleReceivedMessage(const Message& message)
 
                     known.append(title.trimmed());
                 }
-                server_m->sendMessageToChannel("#valhalla", "Known titles for series with codename '"+series->GetName()+"': "+known);
+                server_m->sendMessageToChannel(message.senderChannel(), "Known titles for series with codename '"+series->GetName()+"': "+known);
             }
             else if (Episode* episode = series->GetEpisodeByOrder(commands[2]))
             {
                 server_m->sendMessageToChannel(message.senderChannel(), episode->GetAirString());
                 if (commands.size() == 4 && commands[3] == "info")
                 {
-                    server_m->sendMessageToChannel("#valhalla", "---!!! SPOILER ALERT !!!---");
-                    server_m->sendMessageToChannel("#valhalla", episode->GetInfo());
-                    server_m->sendMessageToChannel("#valhalla", "---!!! SPOILER ALERT !!!---");
+                    server_m->sendMessageToChannel(message.senderChannel(), "---!!! SPOILER ALERT !!!---");
+                    server_m->sendMessageToChannel(message.senderChannel(), episode->GetInfo());
+                    server_m->sendMessageToChannel(message.senderChannel(), "---!!! SPOILER ALERT !!!---");
                 }
             }
         }
@@ -127,9 +124,9 @@ void Bot::handleReceivedMessage(const Message& message)
     }
 }
 
-void Bot::HandleTimeComparison(QStringList qStrList)
+void Bot::HandleTimeComparison(QString channel, QStringList qStrList)
 {
     Timestamp stamp(qStrList[1], qStrList[2]);
-    server_m->sendMessageToChannel("#valhalla", "Unix time for timestamp "+stamp.write(FORMAT_TIME_DATE)+" is "+stamp.write(FORMAT_UNIX)+" at actual time ");
-    server_m->sendMessageToChannel("#valhalla", "Current timestamp is UNIX:"+Timestamp().write(FORMAT_UNIX)+" STAMP:"+Timestamp().write(FORMAT_TIME_DATE));
+    server_m->sendMessageToChannel(channel, "Unix time for timestamp "+stamp.write(FORMAT_TIME_DATE)+" is "+stamp.write(FORMAT_UNIX)+" at actual time ");
+    server_m->sendMessageToChannel(channel, "Current timestamp is UNIX:"+Timestamp().write(FORMAT_UNIX)+" STAMP:"+Timestamp().write(FORMAT_TIME_DATE));
 }

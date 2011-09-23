@@ -13,6 +13,9 @@ class IRCServer;
 class ProfileMgr;
 
 typedef QMap<QString, Series*> SeriesMap;
+typedef QMap<QString, uint> ChannelMuteMap;
+
+#define MUTE_TIME 15
 
 class Bot : public QObject
 {
@@ -31,11 +34,16 @@ class Bot : public QObject
         void handleReceivedMessage(const Message& message);
 
     private:
-        void HandleTimeComparison(QString channel, QStringList qStrList);
+        void HandleTimeComparison(const Message& message);
+        void HandleSeriesCommands(const Message& message);
+        void HandleProfileCommands(const Message& message);
+        void HandleHashCommand(const Message& message);
 
+        bool CanAccessSeriesCommands(const Message& message);
         IRCServer* server_m;
         ProfileMgr* profileMgr;
 
         SeriesMap lSeries_m;
+        ChannelMuteMap muteMap_m;
 };
 #endif

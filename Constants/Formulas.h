@@ -12,6 +12,7 @@
 #define COMPARE "compare"
 #define SERIES "series"
 #define PROFILE "profile"
+#define HASH "hash"
 #define LIST "list"
 #define RELOAD "reload"
 #define NEXT "next"

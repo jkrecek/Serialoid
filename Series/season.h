@@ -20,7 +20,7 @@ class Season
         int GetSecondsDiff() const { return airHourDiff_m*3600; }
         QString GetInfo() const { return Info_m; }
         EpisodeMap& GetEpisodes() { return lEpisodes_m; }
-        Episode* GetEpisode(uint Id) const { return lEpisodes_m.contains(Id) ? lEpisodes_m[Id] : NULL; }
+        Episode* GetEpisode(uint Id) const { return lEpisodes_m.value(Id); }
     private:
         uint seasonNumber_m;
         QString Info_m;

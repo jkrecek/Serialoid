@@ -55,25 +55,7 @@ void SeriesParser::HandleSetting(QString line)
         series->SetTitles(line.mid(line.indexOf(setting[2])).split(",", QString::SkipEmptyParts));
     else if (setting[1] == "season")
     {
-        if (setting[2] == "current")
-        {
-            if (setting.size() == 4)
-            {
-                if (uint seasonNumber = setting[3].toUInt())
-                    series->SetCurrentSeason(seasonNumber);
-                else
-                {
-                    writeError("Command 'season current' for series codenamed '"+setting[0]+"' has wrong parameter 4, it cannot be converted to UInt!");
-                    return;
-                }
-            }
-            else
-            {
-                writeError("Command 'season current' for series codenamed '"+setting[0]+"' has wrong number of parameters (has "+QString::number(setting.size())+" instead of 4)");
-                return;
-            }
-        }
-        else if (setting[2] == "add")
+        if (setting[2] == "add")
         {
             if (setting.size() == 4 || setting.size() == 5)
             {

@@ -22,9 +22,9 @@ class Series
         }
 
         SeasonMap& GetSeasons() { return lSeasons_m; }
-        Season* GetSeason(uint Id) const { return lSeasons_m.contains(Id) ? lSeasons_m[Id] : NULL; }
+        Season* GetSeason(uint Id) const { return lSeasons_m.value(Id); }
         QStringList GetTitles() const { return seriesTitles_m; }
-        QString GetMainTitle() const { return seriesTitles_m.empty() ? seriesName_m.trimmed() : seriesTitles_m.first().trimmed(); }
+        QString GetMainTitle() const { return seriesTitles_m.empty() ? seriesName_m : seriesTitles_m.first(); }
         QString GetName() const { return seriesName_m; }
         QString GetInfo() const { return info_m; }
         Episode* GetEpisodeByOrder(EpisodeOrder order)

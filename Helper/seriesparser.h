@@ -10,7 +10,7 @@ struct SeriesParser
 {
     SeriesParser(QString _setting, QString _error);
     void HandleSetting(QString line);
-    Series* GetSeries(QString name) const { return lSeries_m.contains(name) ? lSeries_m[name] : NULL; }
+    Series* GetSeries(QString name) const { return lSeries_m.value(name); }
     SeriesMap lSeries_m;
     void writeError(QString error);
 

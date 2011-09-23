@@ -1,27 +1,27 @@
 QT += network
 CONFIG += console
 TEMPLATE = app
-HEADERS += ircserver.h \
-    message.h \
-    channel.h \
-    messageparser.h \
-    user.h \
-    ircconstants.h \
-    spambot.h \
-    Formulas.h \
-    series.h \
-    episode.h \
-    season.h \
-    episodeorder.h \
-    setting.h \
-    timestamp.h
+HEADERS += Constants/ircconstants.h \
+    Constants/Formulas.h \
+    Helper/timestamp.h \
+    Helper/setting.h \
+    Helper/messageparser.h \
+    Helper/episodeorder.h \
+    IRC/user.h \
+    IRC/spambot.h \
+    IRC/message.h \
+    IRC/ircserver.h \
+    IRC/channel.h \
+    Series/series.h \
+    Series/season.h \
+    Series/episode.h
 
-SOURCES += main.cpp \
-    message.cpp \
-    channel.cpp \
-    messageparser.cpp \
-    user.cpp \
-    ircserver.cpp \
-    spambot.cpp \
-    setting.cpp \
-    timestamp.cpp
+SOURCES += Helper/timestamp.cpp \
+    Helper/setting.cpp \
+    Helper/messageparser.cpp \
+    IRC/user.cpp \
+    IRC/spambot.cpp \
+    IRC/message.cpp \
+    IRC/ircserver.cpp \
+    IRC/channel.cpp
+

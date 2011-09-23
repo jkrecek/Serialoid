@@ -102,11 +102,16 @@ void Bot::handleReceivedMessage(const Message& message)
                 if (Episode* episode = series->GetEpisodeByOrder(epOrder))
                 {
                     server_m->sendMessageToChannel(message.senderChannel(), episode->GetAirString());
-                    if (commands.size() == 4 && commands[3] == "info")
+                    if (commands.size() == 4 && commands[3] == INFO)
                     {
-                        server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
-                        server_m->sendMessageToUser(message.senderNick(), episode->GetInfo());
-                        server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
+                        if (!episode->GetInfo().isEmpty())
+                        {
+                            server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
+                            server_m->sendMessageToUser(message.senderNick(), episode->GetInfo());
+                            server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
+                        }
+                        else
+                            server_m->sendMessageToUser(message.senderNick(), "No info for episode "+epOrder.GetNormalLook()+" found!");
                     }
                 }
                 else

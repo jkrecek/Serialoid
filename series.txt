@@ -128,3 +128,70 @@ simpsons season add 23
 simpsons s23e01 "The Falcon and the D'Ohman" "25.9.2011 20:00:00"
 simpsons s23e02 "Bart Stops to Smell the Roosevelts" "2.10.2011 20:00:00"
 simpsons s23e03 "The Food Wife" "9.10.2011 20:00:00"
+
+###########
+# 30 rock #
+###########
+create 30rock
+30rock titles 30 Rock
+#30rock season add 5
+
+
+##########
+# Alphas #
+##########
+create alphas
+alphas titles Alphas 
+alphas season add 1
+alphas s01e10 "The Unusual Suspects" "19.9.2011 22:00:00"
+alphas s01e11 "Original Sin" "26.9.2011 22:00:00"
+
+###################
+# Californication #
+###################
+create californication
+californication titles Californication 
+californication season add 5
+#californication s23e01 "The Falcon and the D'Ohman" "25.9.2011 20:00:00"
+
+##############
+# Doctor Who #
+##############
+create drwho
+drwho titles Doctor Who
+#drwho season add 23
+#drwho s23e01 "The Falcon and the D'Ohman" "25.9.2011 20:00:00"
+
+###########
+# Misfits #
+###########
+create misfits
+misfits titles Misfits
+misfits season add 3
+#misfits s23e01 "The Falcon and the D'Ohman" "25.9.2011 20:00:00"
+
+##############
+# South Park #
+##############
+create south_park
+south_park titles South Park
+#south_park season add 23
+#south_park s23e01 "The Falcon and the D'Ohman" "25.9.2011 20:00:00"
+
+#############
+# Torchwood #
+#############
+create torchwood
+torchwood titles Torchwood 
+#torchwood season add 23
+#torchwood s23e01 "The Falcon and the D'Ohman" "25.9.2011 20:00:00"
+
+#########
+# Weeds #
+#########
+create weeds
+weeds titles Weeds, Trava
+weeds season add 7
+#add remaining
+weeds s07e12 "Qualitative Spatial Reasoning" "19.9.2011 22:00:00"
+weeds s07e13 "Do Her/Don't Do He" "26.9.2011 22:00:00"

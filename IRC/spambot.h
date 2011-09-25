@@ -4,6 +4,7 @@
 #include <QMap>
 #include <QObject>
 #include <QStringList>
+#include "commandparser.h"
 #include "message.h"
 #include "profilemgr.h"
 #include "series.h"
@@ -11,6 +12,7 @@
 
 class IRCServer;
 class ProfileMgr;
+class CommandParser;
 
 typedef QMap<QString, Series*> SeriesMap;
 typedef QMap<QString, uint> ChannelMuteMap;
@@ -42,8 +44,11 @@ class Bot : public QObject
         bool CanAccessSeriesCommands(const Message& message);
         IRCServer* server_m;
         ProfileMgr* profileMgr;
+        Message* message_m;
+        CommandParser* command;
 
         SeriesMap lSeries_m;
         ChannelMuteMap muteMap_m;
 };
+
 #endif

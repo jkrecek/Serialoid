@@ -8,6 +8,7 @@ HEADERS += Constants/ircconstants.h \
     Helper/seriesparser.h \
     Helper/messageparser.h \
     Helper/episodeorder.h \
+    Helper/commandparser.h \
     IRC/user.h \
     IRC/spambot.h \
     IRC/message.h \
@@ -20,6 +21,7 @@ HEADERS += Constants/ircconstants.h \
     Profile/profile.h
 
 SOURCES += main.cpp \
+    Helper/commandparser.cpp \
     Helper/timestamp.cpp \
     Helper/seriesparser.cpp \
     Helper/messageparser.cpp \

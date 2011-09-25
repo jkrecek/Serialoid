@@ -14,8 +14,6 @@ struct Message
         ~Message() {}
 
         QString senderNick() const { return senderNick_m; }
-        //QString senderUser() const { return senderUser_m; }
-        //QString senderHost() const { return senderHost_m; }
         QString senderChannel() const { return senderChannel_m; }
         QString command() const { return command_m; }
         QString content() const { return content_m; }
@@ -28,9 +26,6 @@ struct Message
 
     private:
         void setSenderNick(QString senderNick) { senderNick_m = senderNick; }
-        //void setSenderUser(QString senderUser) { senderUser_m = senderUser; }
-        //void setSenderHost(QString senderHost) { senderHost_m = senderHost; }
-
         void setCommand(QString command) { command_m = command; }
         void setContent(QString content) { content_m = content; }
         void setCode(uint code) { code_m = code; }
@@ -40,8 +35,6 @@ struct Message
         void setChannel(QString channel) { senderChannel_m = channel; }
 
         QString senderNick_m;
-        //QString senderUser_m;
-        //QString senderHost_m;
         QString senderChannel_m;
         QString command_m;
         QString content_m;

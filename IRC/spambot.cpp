@@ -39,19 +39,32 @@ void Bot::handleReceivedMessage(const Message& message)
     if (message.command() == IRC::Command::Kick)
         server_m->joinChannel(message.senderChannel());
 
-    if (CanAccessSeriesCommands(message))
+    command = new CommandParser(message.content(), profileMgr, lSeries_m);
+    if (command->IsCommand(1))
     {
-        QString firstWord = message.content().left(message.content().indexOf(" ")).trimmed();
-
-        if (firstWord == COMPARE)
-            HandleTimeComparison(message);
-        else if (firstWord == SERIES)
-            HandleSeriesCommands(message);
-        else if (firstWord == PROFILE)
-            HandleProfileCommands(message);
-        else if (firstWord == HASH)
-            HandleHashCommand(message);
+        if (CanAccessSeriesCommands(message))
+        {
+            switch(command->GetCommandOnPos(2))
+            {
+                case COMMAND_COMPARE:
+                    HandleTimeComparison(message);
+                    break;
+                case COMMAND_SERIES:
+                    HandleSeriesCommands(message);
+                    break;
+                case COMMAND_PROFILE:
+                    HandleProfileCommands(message);
+                    break;
+                case COMMAND_HASH:
+                    HandleHashCommand(message);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
+    delete command;
+    command = NULL;
 
     if (message.senderNick() == server_m->ownNick() && message.content() == "quit")
         exit(1);
@@ -65,102 +78,120 @@ void Bot::handleReceivedMessage(const Message& message)
 
 void Bot::HandleTimeComparison(const Message &message)
 {
-    QStringList qStrList = message.content().split(" ");
-    if (qStrList.size() != 3)
-        return;
-
-    Timestamp stamp(qStrList[1], qStrList[2]);
+    Timestamp stamp(command->GetMessagePart(2), command->GetMessagePart(3));
     server_m->sendMessageToChannel(message.senderChannel(), "Unix time for timestamp "+stamp.write(FORMAT_TIME_DATE)+" is "+stamp.write(FORMAT_UNIX)+" at actual time ");
     server_m->sendMessageToChannel(message.senderChannel(), "Current timestamp is UNIX:"+Timestamp().write(FORMAT_UNIX)+" STAMP:"+Timestamp().write(FORMAT_TIME_DATE));
 }
 
 void Bot::HandleSeriesCommands(const Message &message)
 {
-    QStringList word = message.content().split(" ");
-    if (word[1] == LIST)
+    switch(command->GetCommandOnPos(2))
     {
-        QString known;
-        foreach(Series* series, lSeries_m)
+        case COMMAND_LIST:
         {
-            if (!known.isEmpty())
-                known.append(", ");
-
-            known.append(series->GetMainTitle()+" ("+series->GetName()+")");
-        }
-        server_m->sendMessageToChannel(message.senderChannel(), ".:Printing all known series ( format Name(codename) ):.");
-        server_m->sendMessageToChannel(message.senderChannel(), known);
-    }
-    else if (word[1] == RELOAD)
-    {
-        SeriesParser(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE, lSeries_m);
-        server_m->sendMessageToChannel(message.senderChannel(), "Series reloaded succesfully");
-    }
-    else if (Series* series = GetSeries(word[1]))
-    {
-        if (word[2] == NEXT)
-        {
-            if (Episode* nextEp = series->GetNextEpisode())
+            QString known;
+            foreach(Series* series, lSeries_m)
             {
-                server_m->sendMessageToChannel(message.senderChannel(), ".:"+series->GetMainTitle()+" - next episode:.");
-                server_m->sendMessageToChannel(message.senderChannel(), nextEp->GetAirString());
+                if (!known.isEmpty())
+                    known.append(", ");
+
+                known.append(series->GetMainTitle()+" ("+series->GetName()+")");
             }
-            else
-                server_m->sendMessageToChannel(message.senderChannel(), "No more episodes to be aired for series "+series->GetMainTitle()+"!");
+            server_m->sendMessageToChannel(message.senderChannel(), ".:Printing all known series ( format Name(codename) ):.");
+            server_m->sendMessageToChannel(message.senderChannel(), known);
+            break;
         }
-        else if (word[2] == INFO)
+        case COMMAND_RELOAD:
         {
-            if (!series->GetInfo().isEmpty())
+            SeriesParser(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE, lSeries_m);
+            server_m->sendMessageToChannel(message.senderChannel(), "Series reloaded succesfully");
+            break;
+        }
+        case COMMAND_IS_SERIES:
+        {
+            Series* series = GetSeries(command->GetMessagePart(2));
+            switch(command->GetCommandOnPos(3))
             {
-                server_m->sendMessageToChannel(message.senderChannel(), ".:"+series->GetMainTitle()+" - info:.");
-                server_m->sendMessageToChannel(message.senderChannel(), series->GetInfo());
-            }
-            else
-                server_m->sendMessageToChannel(message.senderChannel(), "No info for series "+series->GetMainTitle()+" found!");
-        }
-
-        else if (word[2] == TITLES)
-        {
-            QString known = series->GetTitles().join(", ");
-            if (!known.isEmpty())
-                server_m->sendMessageToChannel(message.senderChannel(), "Known titles for series with codename '"+series->GetName()+"': "+known);
-            else
-                server_m->sendMessageToChannel(message.senderChannel(), "Series is known only by its codename '"+series->GetName()+"'");
-        }
-        else
-        {
-            EpisodeOrder epOrder(word[2]);
-            if (!epOrder.isSet())
-                return;
-
-            if (Episode* episode = series->GetEpisodeByOrder(epOrder))
-            {
-                server_m->sendMessageToChannel(message.senderChannel(), episode->GetAirString());
-                if (word.size() == 4 && word[3] == INFO)
+                case COMMAND_NEXT:
                 {
-                    if (!episode->GetInfo().isEmpty())
+                    if (Episode* nextEp = series->GetNextEpisode())
                     {
-                        server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
-                        server_m->sendMessageToUser(message.senderNick(), episode->GetInfo());
-                        server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
+                        server_m->sendMessageToChannel(message.senderChannel(), ".:"+series->GetMainTitle()+" - next episode:.");
+                        server_m->sendMessageToChannel(message.senderChannel(), nextEp->GetAirString());
                     }
                     else
-                        server_m->sendMessageToUser(message.senderNick(), "No info for episode "+epOrder.GetNormalLook()+" found!");
+                        server_m->sendMessageToChannel(message.senderChannel(), "No more episodes to be aired for series "+series->GetMainTitle()+"!");
+
+                    break;
                 }
+                case COMMAND_INFO:
+                {
+                    if (!series->GetInfo().isEmpty())
+                    {
+                        server_m->sendMessageToChannel(message.senderChannel(), ".:"+series->GetMainTitle()+" - info:.");
+                        server_m->sendMessageToChannel(message.senderChannel(), series->GetInfo());
+                    }
+                    else
+                        server_m->sendMessageToChannel(message.senderChannel(), "No info for series "+series->GetMainTitle()+" found!");
+
+                    break;
+                }
+                case COMMAND_TITLES:
+                {
+                    QString known = series->GetTitles().join(", ");
+                    if (!known.isEmpty())
+                        server_m->sendMessageToChannel(message.senderChannel(), "Known titles for series with codename '"+series->GetName()+"': "+known);
+                    else
+                        server_m->sendMessageToChannel(message.senderChannel(), "Series is known only by its codename '"+series->GetName()+"'");
+
+                    break;
+                }
+                case COMMAND_EP_ORDER:
+                {
+                    EpisodeOrder epOrder(command->GetMessagePart(3));
+                    if (!epOrder.isSet())
+                    {
+                        server_m->sendMessageToChannel(message.senderChannel(), "SOMETHING WENT TERRIBLY WRONG!");
+                        break;
+                    }
+
+                    if (Episode* episode = series->GetEpisodeByOrder(epOrder))
+                    {
+                        server_m->sendMessageToChannel(message.senderChannel(), episode->GetAirString());
+                        if (command->GetCommandOnPos(COMMAND_INFO))
+                        {
+                            if (!episode->GetInfo().isEmpty())
+                            {
+                                server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
+                                server_m->sendMessageToUser(message.senderNick(), episode->GetInfo());
+                                server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
+                            }
+                            else
+                                server_m->sendMessageToUser(message.senderNick(), "No info for episode "+epOrder.GetNormalLook()+" found!");
+                        }
+                    }
+                    else
+                        server_m->sendMessageToChannel(message.senderChannel(), "Episode "+epOrder.GetNormalLook()+" not found!");
+
+                    break;
+                }
+                default:
+                    break;
             }
-            else
-                server_m->sendMessageToChannel(message.senderChannel(), "Episode "+epOrder.GetNormalLook()+" not found!");
+            break;
         }
+        default:
+            break;
     }
 }
 
 void Bot::HandleProfileCommands(const Message &message)
 {
-    QStringList word = message.content().split(" ");
-    if (word[1] == "add")
+    switch(command->GetCommandOnPos(2))
     {
-        if (word.size() > 3)
+        case COMMAND_ADD:
         {
-            QString& profileName = word[2];
+            const QString profileName = command->GetMessagePart(3);
             if (profileName.isEmpty())
             {
                 server_m->sendMessageToChannel(message.senderChannel(), "Profile name cannot be empty!");
@@ -175,7 +206,7 @@ void Bot::HandleProfileCommands(const Message &message)
             if (!profile)
             {
                 profile = new Profile(profileName);
-                profile->SetSeries(message.content().mid(message.content().indexOf(word[3])), lSeries_m);
+                profile->SetSeries(message.content().mid(message.content().indexOf(command->GetMessagePart(4))), lSeries_m);
                 profileMgr->AddProfile(profile);
 
                 QString s;
@@ -190,86 +221,113 @@ void Bot::HandleProfileCommands(const Message &message)
             }
             else
                 server_m->sendMessageToChannel(message.senderChannel(), "Profile already exists!");
-        }
-    }
-    else if (Profile* profile = profileMgr->GetProfile(word[1]))
-    {
-        if (word.size() < 3)
-            return;
 
-        if (word[2] == "next")
+            break;
+        }
+        case COMMAND_IS_PROFILE:
         {
-            if (word.size() != 3)
-                return;
-
-            foreach(Series* series, profile->GetProfileSeries())
-                if (Episode* ep = series->GetNextEpisode())
-                    server_m->sendMessageToChannel(message.senderChannel(), series->GetMainTitle()+": "+ep->GetAirString());
-        }
-        else if (word[2] == "pass")
-        {
-            if (word.size() == 4)
+            Profile* profile = profileMgr->GetProfile(command->GetMessagePart(2));
+            switch(command->GetCommandOnPos(3))
             {
-                if (!profile->GetPassHash().isEmpty())
+                case COMMAND_NEXT:
                 {
-                    server_m->sendMessageToChannel(message.senderChannel(), "Password already set, if you wish to change it please type 'profile "+profile->GetName()+" pass old new'");
-                    return;
-                }
+                    foreach(Series* series, profile->GetProfileSeries())
+                        if (Episode* ep = series->GetNextEpisode())
+                            server_m->sendMessageToChannel(message.senderChannel(), series->GetMainTitle()+": "+ep->GetAirString());
 
-                profile->SetPassHash(isSha1Hash(word[3]) ? word[3] : getHashFor(word[3]));
-                server_m->sendMessageToChannel(message.senderChannel(), "Password succesfully set!");
-            }
-            else if (word.size() == 5)
-            {
-                if (profile->GetPassHash().isEmpty())
+                    break;
+                }
+                case COMMAND_PASS:
                 {
-                    server_m->sendMessageToChannel(message.senderChannel(), "Cannot change password when none is set!");
-                    return;
-                }
+                    switch(command->GetSize())
+                    {
+                        case 4:
+                        {
+                            if (!profile->GetPassHash().isEmpty())
+                            {
+                                server_m->sendMessageToChannel(message.senderChannel(), "Password already set, if you wish to change it please type 'profile "+profile->GetName()+" pass old new'");
+                                break;
+                            }
+                            QString pass = command->GetMessagePart(4);
+                            if (!pass.isEmpty())
+                            {
+                                profile->SetPassHash(isSha1Hash(pass) ? pass : getHashFor(pass));
+                                server_m->sendMessageToChannel(message.senderChannel(), "Password succesfully set!");
+                            }
+                            break;
+                        }
+                        case 5:
+                        {
+                            if (profile->GetPassHash().isEmpty())
+                            {
+                                server_m->sendMessageToChannel(message.senderChannel(), "Cannot change password when none is set!");
+                                return;
+                            }
 
-                if (!profile->IsPassCorrect(word[3]))
+                            if (!profile->IsPassCorrect(command->GetMessagePart(4)))
+                            {
+                                server_m->sendMessageToChannel(message.senderChannel(), "Wrong password!");
+                                return;
+                            }
+
+                            QString pass = command->GetMessagePart(5);
+                            if (!pass.isEmpty())
+                            {
+                                profile->SetPassHash(isSha1Hash(pass) ? pass : getHashFor(pass));
+                                server_m->sendMessageToChannel(message.senderChannel(), "Password succesfully edited!");
+                            }
+                            break;
+                        }
+                        default:
+                        {
+                            server_m->sendMessageToChannel(message.senderChannel(), "Command 'profile "+profile->GetName()+" pass' have to have 4 or 5 arguments!");
+                            break;
+                        }
+                    }
+                    profileMgr->Save();
+                    break;
+                }
+                case COMMAND_EDIT:
                 {
-                    server_m->sendMessageToChannel(message.senderChannel(), "Wrong password!");
-                    return;
+                    if (!profile->IsPassCorrect(command->GetMessagePart(4)))
+                    {
+                        server_m->sendMessageToChannel(message.senderChannel(), "Wrong password!");
+                        return;
+                    }
+
+                    QString seriesStart = command->GetMessagePart(5);
+                    if (seriesStart.isEmpty())
+                    {
+                        server_m->sendMessageToChannel(message.senderChannel(), "If you wish to change series in your profile, you have to enter new ones!");
+                        break;
+                    }
+
+                    profile->SetSeries(message.content().mid(message.content().indexOf(seriesStart)), lSeries_m);
+
+                    QString s;
+                    foreach(Series* series, profile->GetProfileSeries())
+                    {
+                        if (!s.isEmpty())
+                            s.append(", ");
+
+                        s.append(series->GetMainTitle()+"("+series->GetName()+")");
+                    }
+                    server_m->sendMessageToChannel(message.senderChannel(), "Succesfully edited profile '"+profile->GetName()+"' containing series: "+s);
+                    break;
                 }
-
-                profile->SetPassHash(isSha1Hash(word[4]) ? word[4] : getHashFor(word[4]));
-                server_m->sendMessageToChannel(message.senderChannel(), "Password succesfully edited!");
+                default:
+                    break;
             }
-            else
-                return;
-
-            profileMgr->Save();
+            break;
         }
-        else if (word[2] == "edit")
-        {
-            if (word.size() < 5)
-                return;
-
-            if (!profile->IsPassCorrect(word[3]))
-            {
-                server_m->sendMessageToChannel(message.senderChannel(), "Wrong password!");
-                return;
-            }
-
-            profile->SetSeries(message.content().mid(message.content().indexOf(word[4])), lSeries_m);
-
-            QString s;
-            foreach(Series* series, profile->GetProfileSeries())
-            {
-                if (!s.isEmpty())
-                    s.append(", ");
-
-                s.append(series->GetMainTitle()+"("+series->GetName()+")");
-            }
-            server_m->sendMessageToChannel(message.senderChannel(), "Succesfully edited profile '"+profile->GetName()+"' containing series: "+s);
-        }
+        default:
+            break;
     }
 }
 
 void Bot::HandleHashCommand(const Message &message)
 {
-    if (message.content().count(" ") != 1)
+    if (command->GetSize() != 2)
         return;
 
     server_m->sendMessageToChannel(message.senderChannel(), getHashFor(message.content().mid(message.content().indexOf(" "))));
@@ -278,10 +336,6 @@ void Bot::HandleHashCommand(const Message &message)
 bool Bot::CanAccessSeriesCommands(const Message &message)
 {
     if (message.isPrivate())
-        return true;
-
-    QString command = message.content().left(message.content().indexOf(" ")).trimmed();
-    if (command != COMPARE && command != SERIES && command != PROFILE && command != HASH)
         return true;
 
     if ((muteMap_m.value(message.senderChannel())+MUTE_TIME) < uint(time(0)))

@@ -17,6 +17,7 @@ class ProfileMgr
 
         bool isNameForbidden(QString profileName) const;
         void writeError(QString error);
+        bool HasProfile(QString name) const { return lProfiles_m.contains(name); }
         Profile* GetProfile(QString name) const { return lProfiles_m.value(name); }
         void AddProfile(Profile* prof);
 

@@ -26,7 +26,7 @@ class Profile
             }
         }
         void SetPassHash(QString hash) { passwordHash_m = hash; }
-        bool IsPassCorrect(QString hash) const { return getHashFor(hash) == passwordHash_m; }
+        bool IsPassCorrect(QString hash) const { return !hash.isEmpty() && getHashFor(hash) == passwordHash_m; }
         QString GetPassHash() const { return passwordHash_m; }
 
         QString GetName() const { return profileName_m; }

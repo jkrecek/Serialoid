@@ -44,7 +44,7 @@ void Bot::handleReceivedMessage(const Message& message)
     {
         if (CanAccessSeriesCommands(message))
         {
-            switch(command->GetCommandOnPos(2))
+            switch(command->GetCommandOnPos(1))
             {
                 case COMMAND_COMPARE:
                     HandleTimeComparison(message);

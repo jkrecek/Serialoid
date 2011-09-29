@@ -33,6 +33,7 @@ class Timestamp
         QString getTime() const;
         QString getDate() const;
         QString getDay(int pos = -1) const;
+        uint getUnix() const { return unix_m; }
 
         QString getTo() const;
 

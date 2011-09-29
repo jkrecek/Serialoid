@@ -7,6 +7,7 @@
 #include "season.h"
 
 typedef QMap<uint, Season*> SeasonMap;
+typedef QList<Episode*> EpisodeList;
 
 class Series
 {
@@ -44,6 +45,19 @@ class Series
                             if (episode && !episode->GetAir().passed())
                                 return episode;
             return NULL;
+        }
+
+        EpisodeList GetAllEpisodes()
+        {
+            EpisodeList allEp;
+            if (!lSeasons_m.isEmpty())
+                foreach(Season* season, lSeasons_m)
+                    if (!season->GetEpisodes().isEmpty())
+                        foreach(Episode* episode, season->GetEpisodes())
+                            if (episode)
+                                allEp.push_back(episode);
+
+            return allEp;
         }
 
     private:

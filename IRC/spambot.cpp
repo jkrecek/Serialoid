@@ -107,6 +107,48 @@ void Bot::HandleSeriesCommands(const Message &message)
             server_m->sendMessageToChannel(message.senderChannel(), "Series reloaded succesfully");
             break;
         }
+        case COMMAND_TODAY:
+        {
+            Timestamp morning("00:00:00", Timestamp().getDate());
+            Timestamp evening(morning.getUnix()+DAY_S);
+
+            bool found = false;
+            foreach(Series* series, lSeries_m)
+            {
+                foreach(Episode* ep, series->GetAllEpisodes())
+                {
+                    if (isInRange(morning.getUnix(), ep->GetAir().getUnix(), evening.getUnix()))
+                    {
+                        server_m->sendMessageToChannel(message.senderChannel(), series->GetMainTitle()+": "+ep->GetAirString());
+                        found = true;
+                    }
+                }
+            }
+            if (!found)
+                server_m->sendMessageToChannel(message.senderChannel(), "No series is about to be aired today!");
+            break;
+        }
+        case COMMAND_TOMORROW:
+        {
+            Timestamp morning("23:59:59", Timestamp().getDate());
+            Timestamp evening(morning.getUnix()+DAY_S);
+
+            bool found = false;
+            foreach(Series* series, lSeries_m)
+            {
+                foreach(Episode* ep, series->GetAllEpisodes())
+                {
+                    if (isInRange(morning.getUnix(), ep->GetAir().getUnix(), evening.getUnix()))
+                    {
+                        server_m->sendMessageToChannel(message.senderChannel(), series->GetMainTitle()+": "+ep->GetAirString());
+                        found = true;
+                    }
+                }
+            }
+            if (!found)
+                server_m->sendMessageToChannel(message.senderChannel(), "No series is about to be aired tomorrow!");
+            break;
+        }
         case COMMAND_IS_SERIES:
         {
             Series* series = GetSeries(command->GetMessagePart(2));
@@ -235,6 +277,48 @@ void Bot::HandleProfileCommands(const Message &message)
                         if (Episode* ep = series->GetNextEpisode())
                             server_m->sendMessageToChannel(message.senderChannel(), series->GetMainTitle()+": "+ep->GetAirString());
 
+                    break;
+                }
+                case COMMAND_TODAY:
+                {
+                    Timestamp morning("00:00:00", Timestamp().getDate());
+                    Timestamp evening(morning.getUnix()+DAY_S);
+
+                    bool found = false;
+                    foreach(Series* series, profile->GetProfileSeries())
+                    {
+                        foreach(Episode* ep, series->GetAllEpisodes())
+                        {
+                            if (isInRange(morning.getUnix(), ep->GetAir().getUnix(), evening.getUnix()))
+                            {
+                                server_m->sendMessageToChannel(message.senderChannel(), series->GetMainTitle()+": "+ep->GetAirString());
+                                found = true;
+                            }
+                        }
+                    }
+                    if (!found)
+                        server_m->sendMessageToChannel(message.senderChannel(), "None of your favorite series is about to be aired today!");
+                    break;
+                }
+                case COMMAND_TOMORROW:
+                {
+                    Timestamp morning("23:59:59", Timestamp().getDate());
+                    Timestamp evening(morning.getUnix()+DAY_S);
+
+                    bool found = false;
+                    foreach(Series* series, profile->GetProfileSeries())
+                    {
+                        foreach(Episode* ep, series->GetAllEpisodes())
+                        {
+                            if (isInRange(morning.getUnix(), ep->GetAir().getUnix(), evening.getUnix()))
+                            {
+                                server_m->sendMessageToChannel(message.senderChannel(), series->GetMainTitle()+": "+ep->GetAirString());
+                                found = true;
+                            }
+                        }
+                    }
+                    if (!found)
+                        server_m->sendMessageToChannel(message.senderChannel(), "None of your favorite series is about to be aired tommorow!");
                     break;
                 }
                 case COMMAND_PASS:

@@ -19,6 +19,8 @@ SeriesCommand CommandParser::GetCommandOnPos(uint pos) const
     else if (commandString == "list")   return COMMAND_LIST;
     else if (commandString == "reload") return COMMAND_RELOAD;
     else if (commandString == "next")   return COMMAND_NEXT;
+    else if (commandString == "today")  return COMMAND_TODAY;
+    else if (commandString == "tomorrow")return COMMAND_TOMORROW;
     else if (commandString == "info")   return COMMAND_INFO;
     else if (commandString == "titles") return COMMAND_TITLES;
     else if (commandString == "add")    return COMMAND_ADD;

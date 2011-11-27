@@ -26,12 +26,12 @@ void SeriesMgr::Load(QString _series, QString _error)
 
     while (!file.atEnd())
     {
-        QString line = file.readLine();
+        const QString line = file.readLine();
         // allow putting comments into file
-        if (line.isNull() || line.startsWith("#"))
+        if (line.trimmed().isEmpty() || line.startsWith("#"))
             continue;
 
-        QStringList setting = line.split(" ", QString::SkipEmptyParts);
+        const QStringList setting = line.split(" ", QString::SkipEmptyParts);
         if (setting.empty())
             continue;
 

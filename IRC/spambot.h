@@ -41,7 +41,7 @@ class Bot : public QObject
         void HandleProfileCommands(const Message& message);
         void HandleHashCommand(const Message& message);
 
-        bool CanAccessSeriesCommands(const Message& message);
+        uint GetCooldownEndTime(const Message& message);
         IRCServer* server_m;
         ProfileMgr* profileMgr;
         Message* message_m;

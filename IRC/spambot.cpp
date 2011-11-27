@@ -91,6 +91,12 @@ void Bot::HandleSeriesCommands(const Message &message)
     {
         case COMMAND_LIST:
         {
+            if (lSeries_m.empty())
+            {
+                server_m->sendMessageToChannel(message.senderChannel(), "No series found, please check your series.txt file.");
+                break;
+            }
+
             QString known;
             foreach(Series* series, lSeries_m)
             {

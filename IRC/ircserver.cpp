@@ -132,6 +132,12 @@ void IRCServer::sendMessageToUser(const QString& userName, const QString& messag
     addPrivateMessageToQueue(userName, messageContent);
 }
 
+void IRCServer::sendNoticeToUser(const QString &userName, const QString &messageContent)
+{
+    QByteArray command = "NOTICE " + userName.toUtf8() + " :" + messageContent.toUtf8();
+    sendCommandAsap(command);
+}
+
 void IRCServer::opSelf(const QString& channel)
 {
     QString message = "OP "+channel;

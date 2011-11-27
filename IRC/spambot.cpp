@@ -42,7 +42,9 @@ void Bot::handleReceivedMessage(const Message& message)
     command = new CommandParser(message.content(), profileMgr, lSeries_m);
     if (command->IsCommand(1))
     {
-        if (CanAccessSeriesCommands(message))
+        if (uint endtime = GetCooldownEndTime(message))
+            server_m->sendNoticeToUser(message.senderNick(), "I'm on cooldown for next "+Timestamp(endtime).getTo());
+        else
         {
             switch(command->GetCommandOnPos(1))
             {
@@ -417,15 +419,14 @@ void Bot::HandleHashCommand(const Message &message)
     server_m->sendMessageToChannel(message.senderChannel(), getHashFor(message.content().mid(message.content().indexOf(" "))));
 }
 
-bool Bot::CanAccessSeriesCommands(const Message &message)
+uint Bot::GetCooldownEndTime(const Message &message)
 {
     if (message.isPrivate())
-        return true;
+        return 0;
 
-    if ((muteMap_m.value(message.senderChannel())+MUTE_TIME) < uint(time(0)))
-    {
-        muteMap_m[message.senderChannel()] = uint(time(0));
-        return true;
-    }
-    return false;
+    if (muteMap_m.value(message.senderChannel()) > uint(time(0)))
+        return muteMap_m.value(message.senderChannel());
+
+    muteMap_m[message.senderChannel()] = uint(time(0))+MUTE_TIME;
+    return 0;
 }

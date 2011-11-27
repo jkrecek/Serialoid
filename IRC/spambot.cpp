@@ -26,7 +26,7 @@ Bot::Bot(QObject* parent) : QObject(parent)
     server_m = new IRCServer("irc.rizon.net", 6667);
     server_m->connectAs("Serialoid", "BOT", "BOT", "Kurva_tahnite_mi_z_nicku");
 
-    server_m->joinChannel("#valhalla");
+    server_m->joinChannel("#soulwell");
 
     qsrand(sqrt(time(0))*2);
 

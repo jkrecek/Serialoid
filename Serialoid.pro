@@ -18,7 +18,8 @@ HEADERS += Constants/ircconstants.h \
     Series/season.h \
     Series/episode.h \
     Profile/profilemgr.h \
-    Profile/profile.h
+    Profile/profile.h \
+    Helper/imdbparser.h
 
 SOURCES += main.cpp \
     Helper/commandparser.cpp \
@@ -30,4 +31,5 @@ SOURCES += main.cpp \
     IRC/message.cpp \
     IRC/ircserver.cpp \
     IRC/channel.cpp \
-    Profile/profilemgr.cpp
+    Profile/profilemgr.cpp \
+    Helper/imdbparser.cpp

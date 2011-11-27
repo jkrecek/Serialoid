@@ -7,26 +7,30 @@
 #include "episodeorder.h"
 #include "Formulas.h"
 #include "channel.h"
+#include "imdbparser.h"
 #include "ircconstants.h"
 #include "ircserver.h"
 #include "seriesparser.h"
 #include "spambot.h"
 #include "user.h"
 
-#define ROUTE_SERIES_FILE "series.txt"
-#define ROUTE_PROFILE_FILE "profile.txt"
-#define ROUTE_ERROR_FILE "error.txt"
+#define ROUTE_SERIES_FILE "C://series.txt"
+#define ROUTE_PROFILE_FILE "C://profile.txt"
+#define ROUTE_ERROR_FILE "C://error.txt"
 
 Bot::Bot(QObject* parent) : QObject(parent)
 {
     SeriesParser(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE, lSeries_m);
     profileMgr = new ProfileMgr(ROUTE_PROFILE_FILE, ROUTE_ERROR_FILE, lSeries_m);
 
+    //IMDBparser(lSeries_m["himym"], "http://www.imdb.com/title/tt0460649/");
+    ImdbParser(lSeries_m["himym"], 460649);
+
     // connecting to servers
     server_m = new IRCServer("irc.rizon.net", 6667);
-    server_m->connectAs("Serialoid", "BOT", "BOT", "Kurva_tahnite_mi_z_nicku");
+    server_m->connectAs("Serijaloid", "BOT", "BOT", "Kurva_tahnite_mi_z_nicku");
 
-    server_m->joinChannel("#valhalla");
+    server_m->joinChannel("#SoulWell");
 
     qsrand(sqrt(time(0))*2);
 

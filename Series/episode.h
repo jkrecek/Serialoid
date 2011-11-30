@@ -19,14 +19,22 @@ class Episode
         QString GetInfo() const             { return Info_m; }
         Timestamp GetAir() const            { return Air_m; }
 
-        QString GetOrderString() const      { return Order_m.GetNormalLook(); }
         QString GetAirString() const
         {
-            QString air = Air_m.passed() ? "was aired" : "will be aired in "+Air_m.getTo();
-            return GetOrderString()+" \""+Name_m+"\" "+air+" at "+Air_m.write(FORMAT_DAY_S_TIME_DATE_GMT);
+            if (Air_m.Aired())
+                return GetOrderString()+" \""+Name_m+"\" "+"was aired at "+Air_m.write(FORMAT_DAY_S_TIME_DATE_GMT);
+            else
+                return GetOrderString()+" \""+Name_m+"\" "+"will be aired in "+Air_m.getTo()+" at "+Air_m.write(FORMAT_DAY_S_TIME_DATE_GMT);
+        }
+
+        QString GetJustAiredString() const
+        {
+            return GetOrderString()+" \""+Name_m+"\" was just aired ("+Air_m.write(FORMAT_DAY_S_TIME_DATE_GMT)+")";
         }
 
     private:
+        QString GetOrderString() const      { return Order_m.GetNormalLook(); }
+
         EpisodeOrder Order_m;
         QString Name_m;
         QString Info_m;

@@ -21,6 +21,7 @@ Bot::Bot(QObject* parent) : QObject(parent)
 {
     SeriesParser(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE, lSeries_m);
     profileMgr = new ProfileMgr(ROUTE_PROFILE_FILE, ROUTE_ERROR_FILE, lSeries_m);
+    updater_m = new Updater(this);
 
     // connecting to servers
     server_m = new IRCServer("irc.rizon.net", 6667);
@@ -28,9 +29,9 @@ Bot::Bot(QObject* parent) : QObject(parent)
 
     server_m->joinChannel("#soulwell");
 
-    qsrand(sqrt(time(0))*2);
-
     connect(server_m, SIGNAL(messageReceived(Message)), this, SLOT(handleReceivedMessage(Message)));
+
+    qsrand(sqrt(time(0))*2);
 }
 
 void Bot::handleReceivedMessage(const Message& message)
@@ -39,14 +40,14 @@ void Bot::handleReceivedMessage(const Message& message)
     if (message.command() == IRC::Command::Kick)
         server_m->joinChannel(message.senderChannel());
 
-    command = new CommandParser(message.content(), profileMgr, lSeries_m);
-    if (command->IsCommand(1))
+    command_m = new CommandParser(message.content(), profileMgr, lSeries_m);
+    if (command_m->IsCommand(1))
     {
         if (uint endtime = GetCooldownEndTime(message))
             server_m->sendNoticeToUser(message.senderNick(), "I'm on cooldown for next "+Timestamp(endtime).getTo());
         else
         {
-            switch(command->GetCommandOnPos(1))
+            switch(command_m->GetCommandOnPos(1))
             {
                 case COMMAND_COMPARE:
                     HandleTimeComparison(message);
@@ -65,8 +66,8 @@ void Bot::handleReceivedMessage(const Message& message)
             }
         }
     }
-    delete command;
-    command = NULL;
+    delete command_m;
+    command_m = NULL;
 
     if (message.senderNick() == server_m->ownNick() && message.content() == "quit")
         exit(1);
@@ -75,19 +76,25 @@ void Bot::handleReceivedMessage(const Message& message)
     {
         if (message.content().toLower().contains(server_m->ownNick().toLower()))
             server_m->sendMessageToChannel(message.senderChannel(), "Coe?!?!?!");
+
+        if (message.content().split(" ").value(4).toLower() == "slaps" && message.content().toLower().contains("spammca"))
+            server_m->kick(message.senderNick(), message.senderChannel(), "Nech ho!");
+
+        if (message.content().toLower().contains("action"))
+            server_m->kick("Tassadar", message.senderChannel());
     }
 }
 
 void Bot::HandleTimeComparison(const Message &message)
 {
-    Timestamp stamp(command->GetMessagePart(2), command->GetMessagePart(3));
+    Timestamp stamp(command_m->GetMessagePart(2), command_m->GetMessagePart(3));
     server_m->sendMessageToChannel(message.senderChannel(), "Unix time for timestamp "+stamp.write(FORMAT_TIME_DATE)+" is "+stamp.write(FORMAT_UNIX)+" at actual time ");
     server_m->sendMessageToChannel(message.senderChannel(), "Current timestamp is UNIX:"+Timestamp().write(FORMAT_UNIX)+" STAMP:"+Timestamp().write(FORMAT_TIME_DATE));
 }
 
 void Bot::HandleSeriesCommands(const Message &message)
 {
-    switch(command->GetCommandOnPos(2))
+    switch(command_m->GetCommandOnPos(2))
     {
         case COMMAND_LIST:
         {
@@ -159,8 +166,8 @@ void Bot::HandleSeriesCommands(const Message &message)
         }
         case COMMAND_IS_SERIES:
         {
-            Series* series = GetSeries(command->GetMessagePart(2));
-            switch(command->GetCommandOnPos(3))
+            Series* series = GetSeries(command_m->GetMessagePart(2));
+            switch(command_m->GetCommandOnPos(3))
             {
                 case COMMAND_NEXT:
                 {
@@ -198,7 +205,7 @@ void Bot::HandleSeriesCommands(const Message &message)
                 }
                 case COMMAND_EP_ORDER:
                 {
-                    EpisodeOrder epOrder(command->GetMessagePart(3));
+                    EpisodeOrder epOrder(command_m->GetMessagePart(3));
                     if (!epOrder.isSet())
                     {
                         server_m->sendMessageToChannel(message.senderChannel(), "SOMETHING WENT TERRIBLY WRONG!");
@@ -208,7 +215,7 @@ void Bot::HandleSeriesCommands(const Message &message)
                     if (Episode* episode = series->GetEpisodeByOrder(epOrder))
                     {
                         server_m->sendMessageToChannel(message.senderChannel(), episode->GetAirString());
-                        if (command->GetCommandOnPos(COMMAND_INFO))
+                        if (command_m->GetCommandOnPos(COMMAND_INFO))
                         {
                             if (!episode->GetInfo().isEmpty())
                             {
@@ -237,11 +244,11 @@ void Bot::HandleSeriesCommands(const Message &message)
 
 void Bot::HandleProfileCommands(const Message &message)
 {
-    switch(command->GetCommandOnPos(2))
+    switch(command_m->GetCommandOnPos(2))
     {
         case COMMAND_ADD:
         {
-            const QString profileName = command->GetMessagePart(3);
+            const QString profileName = command_m->GetMessagePart(3);
             if (profileName.isEmpty())
             {
                 server_m->sendMessageToChannel(message.senderChannel(), "Profile name cannot be empty!");
@@ -256,7 +263,7 @@ void Bot::HandleProfileCommands(const Message &message)
             if (!profile)
             {
                 profile = new Profile(profileName);
-                profile->SetSeries(message.content().mid(message.content().indexOf(command->GetMessagePart(4))), lSeries_m);
+                profile->SetSeries(message.content().mid(message.content().indexOf(command_m->GetMessagePart(4))), lSeries_m);
                 profileMgr->AddProfile(profile);
 
                 QString s;
@@ -276,8 +283,8 @@ void Bot::HandleProfileCommands(const Message &message)
         }
         case COMMAND_IS_PROFILE:
         {
-            Profile* profile = profileMgr->GetProfile(command->GetMessagePart(2));
-            switch(command->GetCommandOnPos(3))
+            Profile* profile = profileMgr->GetProfile(command_m->GetMessagePart(2));
+            switch(command_m->GetCommandOnPos(3))
             {
                 case COMMAND_NEXT:
                 {
@@ -331,7 +338,7 @@ void Bot::HandleProfileCommands(const Message &message)
                 }
                 case COMMAND_PASS:
                 {
-                    switch(command->GetSize())
+                    switch(command_m->GetSize())
                     {
                         case 4:
                         {
@@ -340,7 +347,7 @@ void Bot::HandleProfileCommands(const Message &message)
                                 server_m->sendMessageToChannel(message.senderChannel(), "Password already set, if you wish to change it please type 'profile "+profile->GetName()+" pass old new'");
                                 break;
                             }
-                            QString pass = command->GetMessagePart(4);
+                            QString pass = command_m->GetMessagePart(4);
                             if (!pass.isEmpty())
                             {
                                 profile->SetPassHash(isSha1Hash(pass) ? pass : getHashFor(pass));
@@ -356,13 +363,13 @@ void Bot::HandleProfileCommands(const Message &message)
                                 return;
                             }
 
-                            if (!profile->IsPassCorrect(command->GetMessagePart(4)))
+                            if (!profile->IsPassCorrect(command_m->GetMessagePart(4)))
                             {
                                 server_m->sendMessageToChannel(message.senderChannel(), "Wrong password!");
                                 return;
                             }
 
-                            QString pass = command->GetMessagePart(5);
+                            QString pass = command_m->GetMessagePart(5);
                             if (!pass.isEmpty())
                             {
                                 profile->SetPassHash(isSha1Hash(pass) ? pass : getHashFor(pass));
@@ -381,13 +388,13 @@ void Bot::HandleProfileCommands(const Message &message)
                 }
                 case COMMAND_EDIT:
                 {
-                    if (!profile->IsPassCorrect(command->GetMessagePart(4)))
+                    if (!profile->IsPassCorrect(command_m->GetMessagePart(4)))
                     {
                         server_m->sendMessageToChannel(message.senderChannel(), "Wrong password!");
                         return;
                     }
 
-                    QString seriesStart = command->GetMessagePart(5);
+                    QString seriesStart = command_m->GetMessagePart(5);
                     if (seriesStart.isEmpty())
                     {
                         server_m->sendMessageToChannel(message.senderChannel(), "If you wish to change series in your profile, you have to enter new ones!");
@@ -419,7 +426,7 @@ void Bot::HandleProfileCommands(const Message &message)
 
 void Bot::HandleHashCommand(const Message &message)
 {
-    if (command->GetSize() != 2)
+    if (command_m->GetSize() != 2)
         return;
 
     server_m->sendMessageToChannel(message.senderChannel(), getHashFor(message.content().mid(message.content().indexOf(" "))));
@@ -435,4 +442,12 @@ uint Bot::GetCooldownEndTime(const Message &message)
 
     muteMap_m[message.senderChannel()] = uint(time(0))+MUTE_TIME;
     return 0;
+}
+
+void Bot::Update(const uint diff)
+{
+    foreach(Series* series, lSeries_m)
+        foreach(Episode* ep, series->GetAllEpisodes())
+            if (ep->GetAir().timeFrom() < diff)
+                server_m->sendMessageToChannel("#soulwell", series->GetMainTitle()+": "+ep->GetJustAiredString());
 }

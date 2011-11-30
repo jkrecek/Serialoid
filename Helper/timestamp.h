@@ -26,6 +26,15 @@ class Timestamp
         Timestamp(uint _unix = time(0), int _diff = BOT_GMT);
         Timestamp(QString _str1, QString _str2, int _diff = BOT_GMT);
 
+        uint workUnix() const { return unix_m+(gmtDiff_m+IS_DST)*HOUR_S; }
+
+        bool isCorrect() const { return unix_m != 0; }
+        bool Aired()     const { return isCorrect() && unix_m < uint(time(0)); }
+        bool toBeAired() const { return isCorrect() && unix_m > uint(time(0)); }
+
+        uint timeTo()    const { return toBeAired() ? unix_m - uint(time(0)) : INT_MAX; }
+        uint timeFrom()  const { return     Aired() ? uint(time(0)) - unix_m : INT_MAX; }
+
         QString writeGMT() const;
         QString correctTimeValue(uint val) const;
 
@@ -37,9 +46,6 @@ class Timestamp
 
         QString getTo() const;
 
-        bool passed() const { return unix_m < uint(time(0)); }
-        uint timeTo() const { return !passed() ? unix_m - uint(time(0)) : 0; }
-        uint workUnix() const { return unix_m+(gmtDiff_m+IS_DST)*HOUR_S; }
     private:
         uint unix_m;
         int gmtDiff_m;

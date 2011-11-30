@@ -42,7 +42,7 @@ class Series
                 foreach(Season* season, lSeasons_m)
                     if (!season->GetEpisodes().isEmpty())
                         foreach(Episode* episode, season->GetEpisodes())
-                            if (episode && !episode->GetAir().passed())
+                            if (episode && episode->GetAir().toBeAired())
                                 return episode;
             return NULL;
         }

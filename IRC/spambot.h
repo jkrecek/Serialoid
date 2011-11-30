@@ -9,10 +9,12 @@
 #include "profilemgr.h"
 #include "series.h"
 #include "user.h"
+#include "updater.h"
 
 class IRCServer;
 class ProfileMgr;
 class CommandParser;
+class Updater;
 
 typedef QMap<QString, Series*> SeriesMap;
 typedef QMap<QString, uint> ChannelMuteMap;
@@ -31,6 +33,7 @@ class Bot : public QObject
         Series* GetSeries(QString name) const { return lSeries_m.contains(name) ? lSeries_m[name] : NULL; }
 
         QList<User*> Users;
+        void Update(const uint diff);
 
     private slots:
         void handleReceivedMessage(const Message& message);
@@ -42,10 +45,11 @@ class Bot : public QObject
         void HandleHashCommand(const Message& message);
 
         uint GetCooldownEndTime(const Message& message);
+
         IRCServer* server_m;
         ProfileMgr* profileMgr;
-        Message* message_m;
-        CommandParser* command;
+        CommandParser* command_m;
+        Updater* updater_m;
 
         SeriesMap lSeries_m;
         ChannelMuteMap muteMap_m;

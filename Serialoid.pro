@@ -14,6 +14,7 @@ HEADERS += Constants/ircconstants.h \
     IRC/message.h \
     IRC/ircserver.h \
     IRC/channel.h \
+    IRC/updater.h \
     Series/series.h \
     Series/season.h \
     Series/episode.h \
@@ -30,4 +31,5 @@ SOURCES += main.cpp \
     IRC/message.cpp \
     IRC/ircserver.cpp \
     IRC/channel.cpp \
+    IRC/updater.cpp \
     Profile/profilemgr.cpp

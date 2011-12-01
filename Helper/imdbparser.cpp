@@ -1,7 +1,7 @@
 #include <QDebug>
 #include "imdbparser.h"
 
-ImdbParser::ImdbParser(Series* _series, uint _imdbId) : series_m(_series), imdbId_m(_imdbId)
+ImdbParser::ImdbParser(Series* _series, uint _imdbId) : QObject(NULL), series_m(_series), imdbId_m(_imdbId)
 {
     manager_m = new QNetworkAccessManager(this);
     connect(manager_m, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));

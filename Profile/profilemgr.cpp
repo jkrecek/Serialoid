@@ -3,12 +3,24 @@
 #include "profilemgr.h"
 #include "timestamp.h"
 
-ProfileMgr::ProfileMgr(QString _fileName, QString _errorFileName, SeriesMap& _series) :
-    fileName_m(_fileName), errorFileName_m(_errorFileName), lSeries_m(_series)
+void ProfileMgr::Load(QString _profiles, QString _error)
 {
-    QFile file(fileName_m);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!_profiles.isNull())
+        fProfiles_m = _profiles;
+    if (!_error.isNull())
+        fError_m = _error;
+
+    if (fProfiles_m.isNull())
         return;
+
+    QFile file(fProfiles_m);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        PrintOut(now_time, "Profile file NOT found");
+        return;
+    }
+
+    PrintOut(now_time, "Profile file found");
 
     while (!file.atEnd())
     {
@@ -31,14 +43,14 @@ ProfileMgr::ProfileMgr(QString _fileName, QString _errorFileName, SeriesMap& _se
 
         Profile* profile = new Profile(profileName);
         profile->SetPassHash(linePart[1]);
-        profile->SetSeries(line.split("\"")[1], lSeries_m);
+        profile->SetSeries(line.split("\"")[1]);
         lProfiles_m[profileName] = profile;
     }
 }
 
-void ProfileMgr::_save()
+void ProfileMgr::Save()
 {
-    QFile file(fileName_m);
+    QFile file(fProfiles_m);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
         return;
 
@@ -71,7 +83,7 @@ void ProfileMgr::_save()
 void ProfileMgr::AddProfile(Profile* prof)
 {
     lProfiles_m.insert(prof->GetName(), prof);
-    _save();
+    Save();
 }
 
 bool ProfileMgr::isNameForbidden(QString profileName) const
@@ -82,7 +94,7 @@ bool ProfileMgr::isNameForbidden(QString profileName) const
 
 void ProfileMgr::writeError(QString error)
 {
-    QFile file(errorFileName_m);
+    QFile file(fError_m);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
         return;
 

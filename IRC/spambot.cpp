@@ -10,7 +10,7 @@
 #include "imdbparser.h"
 #include "ircconstants.h"
 #include "ircserver.h"
-#include "seriesparser.h"
+#include "seriesmgr.h"
 #include "spambot.h"
 #include "user.h"
 
@@ -20,11 +20,11 @@
 
 Bot::Bot(QObject* parent) : QObject(parent)
 {
-    SeriesParser(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE, lSeries_m);
-    profileMgr = new ProfileMgr(ROUTE_PROFILE_FILE, ROUTE_ERROR_FILE, lSeries_m);
+    sSeries.Load(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE);
+    sProfile.Load(ROUTE_PROFILE_FILE, ROUTE_ERROR_FILE);
 
     //IMDBparser(lSeries_m["himym"], "http://www.imdb.com/title/tt0460649/");
-    ImdbParser(lSeries_m["himym"], 460649);
+    //ImdbParser(lSeries_m["himym"], 460649);
 
     // connecting to servers
     server_m = new IRCServer("irc.rizon.net", 6667);
@@ -43,7 +43,7 @@ void Bot::handleReceivedMessage(const Message& message)
     if (message.command() == IRC::Command::Kick)
         server_m->joinChannel(message.senderChannel());
 
-    command = new CommandParser(message.content(), profileMgr, lSeries_m);
+    command = new CommandParser(message.content());
     if (command->IsCommand(1))
     {
         if (CanAccessSeriesCommands(message))
@@ -94,7 +94,7 @@ void Bot::HandleSeriesCommands(const Message &message)
         case COMMAND_LIST:
         {
             QString known;
-            foreach(Series* series, lSeries_m)
+            foreach(Series* series, sSeries.GetMap())
             {
                 if (!known.isEmpty())
                     known.append(", ");
@@ -107,7 +107,7 @@ void Bot::HandleSeriesCommands(const Message &message)
         }
         case COMMAND_RELOAD:
         {
-            SeriesParser(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE, lSeries_m);
+            sSeries.Load();
             server_m->sendMessageToChannel(message.senderChannel(), "Series reloaded succesfully");
             break;
         }
@@ -117,7 +117,7 @@ void Bot::HandleSeriesCommands(const Message &message)
             Timestamp evening(morning.getUnix()+DAY_S);
 
             bool found = false;
-            foreach(Series* series, lSeries_m)
+            foreach(Series* series, sSeries.GetMap())
             {
                 foreach(Episode* ep, series->GetAllEpisodes())
                 {
@@ -138,7 +138,7 @@ void Bot::HandleSeriesCommands(const Message &message)
             Timestamp evening(morning.getUnix()+DAY_S);
 
             bool found = false;
-            foreach(Series* series, lSeries_m)
+            foreach(Series* series, sSeries.GetMap())
             {
                 foreach(Episode* ep, series->GetAllEpisodes())
                 {
@@ -155,7 +155,7 @@ void Bot::HandleSeriesCommands(const Message &message)
         }
         case COMMAND_IS_SERIES:
         {
-            Series* series = GetSeries(command->GetMessagePart(2));
+            Series* series = sSeries.GetSeries(command->GetMessagePart(2));
             switch(command->GetCommandOnPos(3))
             {
                 case COMMAND_NEXT:
@@ -243,17 +243,17 @@ void Bot::HandleProfileCommands(const Message &message)
                 server_m->sendMessageToChannel(message.senderChannel(), "Profile name cannot be empty!");
                 return;
             }
-            if (profileMgr->isNameForbidden(profileName))
+            if (sProfile.isNameForbidden(profileName))
             {
                 server_m->sendMessageToChannel(message.senderChannel(), "You cannot use profile name "+profileName+". Such name is forbidden!");
                 return;
             }
-            Profile* profile = profileMgr->GetProfile(profileName);
+            Profile* profile = sProfile.GetProfile(profileName);
             if (!profile)
             {
                 profile = new Profile(profileName);
-                profile->SetSeries(message.content().mid(message.content().indexOf(command->GetMessagePart(4))), lSeries_m);
-                profileMgr->AddProfile(profile);
+                profile->SetSeries(message.content().mid(message.content().indexOf(command->GetMessagePart(4))));
+                sProfile.AddProfile(profile);
 
                 QString s;
                 foreach(Series* series, profile->GetProfileSeries())
@@ -272,7 +272,7 @@ void Bot::HandleProfileCommands(const Message &message)
         }
         case COMMAND_IS_PROFILE:
         {
-            Profile* profile = profileMgr->GetProfile(command->GetMessagePart(2));
+            Profile* profile = sProfile.GetProfile(command->GetMessagePart(2));
             switch(command->GetCommandOnPos(3))
             {
                 case COMMAND_NEXT:
@@ -372,7 +372,7 @@ void Bot::HandleProfileCommands(const Message &message)
                             break;
                         }
                     }
-                    profileMgr->Save();
+                    sProfile.Save();
                     break;
                 }
                 case COMMAND_EDIT:
@@ -390,7 +390,7 @@ void Bot::HandleProfileCommands(const Message &message)
                         break;
                     }
 
-                    profile->SetSeries(message.content().mid(message.content().indexOf(seriesStart)), lSeries_m);
+                    profile->SetSeries(message.content().mid(message.content().indexOf(seriesStart)));
 
                     QString s;
                     foreach(Series* series, profile->GetProfileSeries())

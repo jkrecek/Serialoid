@@ -211,7 +211,7 @@ void IRCServer::sendMessage(const QString& rawText)
 
 void IRCServer::send(const QByteArray& rawData)
 {
-    printf("SND '%s': '%s'\n", Timestamp().write(FORMAT_TIME).toStdString().c_str(), rawData.data());
+    PrintOut(now_time, "SND: "+rawData);
     socket_m->write(rawData + "\n");
     socket_m->flush();
 ;
@@ -227,7 +227,7 @@ void IRCServer::readData()
     while (socket_m->canReadLine())
     {
         QByteArray messageInRawText = socket_m->readLine();
-        printf("RCV '%s': '%s'\n", Timestamp().write(FORMAT_TIME).toStdString().c_str(), messageInRawText.trimmed().data());
+        PrintOut(now_time, "RCV: "+messageInRawText);
         Message message = MessageParser::receivedRawTextToMessage(messageInRawText);
 
         emit messageReceived(message);

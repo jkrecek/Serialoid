@@ -6,6 +6,7 @@
 #include "profile.h"
 #include "spambot.h"
 #include "series.h"
+#include "singleton.h"
 
 typedef QMap<QString, Series*> SeriesMap;
 typedef QMap<QString, Profile*> ProfileMap;
@@ -13,7 +14,11 @@ typedef QMap<QString, Profile*> ProfileMap;
 class ProfileMgr
 {
     public:
-        ProfileMgr(QString _fileName, QString _errorFileName, SeriesMap& _series);
+        ProfileMgr() {}
+        ~ProfileMgr() {}
+
+        void Load(QString _fileName, QString _errorFileName);
+        void Save();
 
         bool isNameForbidden(QString profileName) const;
         void writeError(QString error);
@@ -21,15 +26,13 @@ class ProfileMgr
         Profile* GetProfile(QString name) const { return lProfiles_m.value(name); }
         void AddProfile(Profile* prof);
 
-        void Save() { _save(); }
-
     private:
-        void _save();
-
-        QString fileName_m;
-        QString errorFileName_m;
-        const SeriesMap& lSeries_m;
         ProfileMap lProfiles_m;
+
+        QString fProfiles_m;
+        QString fError_m;
 };
+
+#define sProfile Singleton<ProfileMgr>::Instance()
 
 #endif // PROFILEMGR_H

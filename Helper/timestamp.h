@@ -5,6 +5,8 @@
 #include <time.h>
 #include "Formulas.h"
 
+#define now_time Timestamp().write(FORMAT_TIME)
+
 enum Format
 {
     FORMAT_DAY_S_TIME_DATE = 0,

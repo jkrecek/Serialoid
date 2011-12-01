@@ -4,6 +4,7 @@
 #include <QStringList>
 #include <QCryptographicHash>
 #include <time.h>
+#include <stdio.h>
 
 #define FIRST_YEAR 1970
 #define FIRST_MONTH 1
@@ -78,6 +79,11 @@ inline bool isSha1Hash(QString hash)
         return false;
 
     return true;
+}
+
+inline void PrintOut(QString nowTime, QString str)
+{
+    printf("%s: %s\n", nowTime.toStdString().c_str(), str.toStdString().c_str());
 }
 
 #endif // FORMULAS_H

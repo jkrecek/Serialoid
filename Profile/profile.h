@@ -4,6 +4,7 @@
 #include <QStringList>
 #include "Formulas.h"
 #include "series.h"
+#include "seriesmgr.h"
 
 typedef QMap<QString, Series*> SeriesMap;
 
@@ -12,17 +13,17 @@ class Profile
     public:
         Profile(QString _name) : profileName_m(_name) {}
 
-        void SetSeries(QString seriesString, const SeriesMap& _lSeries)
+        void SetSeries(QString seriesString)
         {
             lSeries_m.clear();
             QStringList list = seriesString.split(",");
             foreach(QString listPart, list)
             {
                 QString seriesName = listPart.trimmed();
-                if (!_lSeries.contains(seriesName) || lSeries_m.contains(seriesName))
+                if (!sSeries.GetMap().contains(seriesName) || lSeries_m.contains(seriesName))
                     continue;
 
-                lSeries_m.insert(seriesName, _lSeries.value(seriesName));
+                lSeries_m.insert(seriesName, sSeries.GetMap().value(seriesName));
             }
         }
         void SetPassHash(QString hash) { passwordHash_m = hash; }

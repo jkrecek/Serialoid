@@ -3,8 +3,6 @@
 
 #include <QStringList>
 #include "episodeorder.h"
-#include "profilemgr.h"
-#include "spambot.h"
 
 class ProfileMgr;
 
@@ -33,7 +31,7 @@ enum SeriesCommand
 class CommandParser
 {
     public:
-        CommandParser(QString _message, ProfileMgr* _profilemgr, SeriesMap& _series);
+        CommandParser(QString _message);
 
         QString GetMessagePart(uint pos) const;
         SeriesCommand GetCommandOnPos(uint pos) const;
@@ -42,10 +40,8 @@ class CommandParser
         uint GetSize() const { return uint(parsedMessage_m.size()); }
 
     private:
-        QString message_m;
+        QString     message_m;
         QStringList parsedMessage_m;
-        ProfileMgr* profileMgr_m;
-        const SeriesMap& series_m;
 };
 
 #endif // COMMANDPARSER_H

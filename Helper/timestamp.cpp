@@ -1,10 +1,7 @@
 #include "Formulas.h"
 #include "timestamp.h"
 
-Timestamp::Timestamp(uint _unix, int _diff) : unix_m(_unix), gmtDiff_m(_diff)
-{
-}
-
+Timestamp::Timestamp(uint _unix, int _diff) : unix_m(_unix), gmtDiff_m(_diff) { }
 Timestamp::Timestamp(QString _str1, QString _str2, int _diff) : unix_m(0), gmtDiff_m(_diff)
 {
     QString timeString;

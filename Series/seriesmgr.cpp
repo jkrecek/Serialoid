@@ -22,8 +22,7 @@ void SeriesMgr::Load(QString _series, QString _error)
         PrintOut(now_time, "Series file NOT found");
         return;
     }
-
-     PrintOut(now_time, "Series file found");
+    PrintOut(now_time, "Series file found");
 
     while (!file.atEnd())
     {
@@ -34,7 +33,7 @@ void SeriesMgr::Load(QString _series, QString _error)
 
         QStringList setting = line.split(" ", QString::SkipEmptyParts);
         if (setting.empty())
-            return;
+            continue;
 
         if (setting[0] == "create")
         {
@@ -42,23 +41,23 @@ void SeriesMgr::Load(QString _series, QString _error)
             {
                 QString name = setting[1].trimmed();
                 lSeries_m[name] = new Series(name);
-                return;
+                continue;
             }
             writeError("Command 'create' has wrong number of parameters has wrong number of parameters (has "+QString::number(setting.size())+" instead of 4, did you used codename of series?)");
-            return;
+            continue;
         }
 
         if (setting.size() < 3)
         {
             writeError("Globaly number of parameters must be 3 or higher!");
-            return;
+            continue;
         }
 
         Series* series = lSeries_m.value(setting[0]);
         if (!series)
         {
             writeError("Series codenamed '"+setting[0]+"' was not found!");
-            return;
+            continue;
         }
 
         if (setting[1] == "info")
@@ -74,7 +73,7 @@ void SeriesMgr::Load(QString _series, QString _error)
                     SeasonMap& seaM = series->GetSeasons();
                     uint seasonId = setting[3].toUInt();
                     if (!seasonId || series->GetSeason(seasonId))
-                        return;
+                        continue;
 
                     Season* s = new Season(seasonId);
                     s->SetHourdiff(setting.size() == 5 ? setting[4].toInt() : 0);
@@ -83,7 +82,7 @@ void SeriesMgr::Load(QString _series, QString _error)
                 else
                 {
                     writeError("Command 'season add' for series codenamed '"+setting[0]+"' has wrong number of parameters (has "+QString::number(setting.size())+" instead of 4 or 5)");
-                    return;
+                    continue;
                 }
             }
 
@@ -99,16 +98,16 @@ void SeriesMgr::Load(QString _series, QString _error)
                     else
                     {
                         writeError("Command 'season seasonId' for series codenamed '"+setting[0]+"' unable to found season "+QString::number(seasonId));
-                        return;
+                        continue;
                     }
                 }
                 else
                 {
                     writeError("Command 'season seasonId' for series codenamed '"+setting[0]+"' has wrong number of parameters (has "+QString::number(setting.size())+" instead of 5 or more)");
-                    return;
+                    continue;
                 }
             }
-            return;
+            continue;
         }
         else
         {
@@ -118,14 +117,14 @@ void SeriesMgr::Load(QString _series, QString _error)
                 if (setting.size() < 4)
                 {
                     writeError("Adding episode for series codenamed '"+setting[0]+"' has wrong number of parameters (has "+QString::number(setting.size())+" instead of 4 or more)");
-                    return;
+                    continue;
                 }
 
                 Season* season = series->GetSeason(epO.season);
                 if (!season)
                 {
                     writeError("Adding episode for series codenamed '"+setting[0]+"' unable to found season "+QString::number(epO.season));
-                    return;
+                    continue;
                 }
 
                 EpisodeMap& episodes = season->GetEpisodes();

@@ -1,30 +1,20 @@
 #include <QDebug>
 #include "imdbparser.h"
+#include "urldownloader.h"
 
 ImdbParser::ImdbParser(Series* _series, uint _imdbId) : QObject(NULL), series_m(_series), imdbId_m(_imdbId)
 {
-    manager_m = new QNetworkAccessManager(this);
-    connect(manager_m, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
-
-    manager_m->get(QNetworkRequest(GetUrl(false)));
+    sUDownloader.Get(GetUrl(false).toString());
+    connect(&sUDownloader, SIGNAL(recievedData(QByteArray)), this, SLOT(parseAll(QByteArray)));
 }
 
 ImdbParser::~ImdbParser()
 {
-    delete manager_m;
-}
-
-void ImdbParser::replyFinished(QNetworkReply * reply)
-{
-    qDebug() << "AAAAAAAAA CHYTAAAAM";
-    parseAll(reply->readAll());
-
 }
 
 void ImdbParser::parseAll(const QByteArray &content)
 {
     qDebug() << GetContentInTag(content, "title");
-
 }
 
 QByteArray ImdbParser::GetContentInTag(const QByteArray& content, QByteArray tag, int start)

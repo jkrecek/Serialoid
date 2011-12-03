@@ -7,6 +7,7 @@
 #include <QNetworkRequest>
 #include <QString>
 #include "series.h"
+#include "urldownloader.h"
 
 class ImdbParser : public QObject
 {
@@ -17,14 +18,12 @@ class ImdbParser : public QObject
         ~ImdbParser();
 
     public slots:
-        void replyFinished(QNetworkReply*);
+        void parseAll(const QByteArray& content);
 
     private:
-        void parseAll(const QByteArray& content);
         QUrl GetUrl(bool episode);
         QByteArray GetContentInTag(const QByteArray& content, QByteArray tag, int start = 0);
 
-        QNetworkAccessManager* manager_m;
         Series* series_m;
         uint imdbId_m;
 };

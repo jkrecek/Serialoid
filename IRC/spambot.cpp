@@ -24,7 +24,7 @@ Bot::Bot(QObject* parent) : QObject(parent)
     sProfile.Load(ROUTE_PROFILE_FILE, ROUTE_ERROR_FILE);
 
     //IMDBparser(lSeries_m["himym"], "http://www.imdb.com/title/tt0460649/");
-    //ImdbParser(lSeries_m["himym"], 460649);
+    ImdbParser(sSeries.GetSeries("himym"), 460649);
 
     // connecting to servers
     server_m = new IRCServer("irc.rizon.net", 6667);

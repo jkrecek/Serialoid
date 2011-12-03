@@ -20,7 +20,8 @@ HEADERS += Constants/Formulas.h \
     Series/series.h \
     Series/seriesmgr.h \
     Profile/profilemgr.h \
-    Profile/profile.h
+    Profile/profile.h \
+    IRC/urldownloader.h
 
 SOURCES += main.cpp \
     Helper/commandparser.cpp \
@@ -33,4 +34,5 @@ SOURCES += main.cpp \
     IRC/spambot.cpp \
     IRC/user.cpp \
     Profile/profilemgr.cpp \
-    Series/seriesmgr.cpp
+    Series/seriesmgr.cpp \
+    IRC/urldownloader.cpp

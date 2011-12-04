@@ -9,7 +9,7 @@ UrlDownloader::UrlDownloader()
 
 UrlDownloader::~UrlDownloader()
 {
-    delete manager_m;
+    //delete manager_m;
 }
 
 void UrlDownloader::Get(QString url)

@@ -14,7 +14,7 @@ class ImdbParser : public QObject
     Q_OBJECT
 
     public:
-        ImdbParser(Series* _series, uint _imdbId);
+        ImdbParser(uint _imdbId);
         ~ImdbParser();
 
     public slots:
@@ -24,7 +24,6 @@ class ImdbParser : public QObject
         QUrl GetUrl(bool episode);
         QByteArray GetContentInTag(const QByteArray& content, QByteArray tag, int start = 0);
 
-        Series* series_m;
         uint imdbId_m;
 };
 

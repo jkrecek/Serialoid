@@ -1,8 +1,9 @@
 #include <QDebug>
 #include "imdbparser.h"
 #include "urldownloader.h"
+#include "profilemgr.h"
 
-ImdbParser::ImdbParser(Series* _series, uint _imdbId) : QObject(NULL), series_m(_series), imdbId_m(_imdbId)
+ImdbParser::ImdbParser(uint _imdbId) : QObject(NULL), imdbId_m(_imdbId)
 {
     sUDownloader.Get(GetUrl(false).toString());
     connect(&sUDownloader, SIGNAL(recievedData(QByteArray)), this, SLOT(parseAll(QByteArray)));

@@ -16,7 +16,8 @@ class UrlDownloader : public QObject
         UrlDownloader();
         ~UrlDownloader();
 
-        void Get(QString url);
+        void Get(QUrl url);
+        void Get(QString url) { return Get(QUrl(url)); }
 
     signals:
         void recievedData(const QByteArray& data);

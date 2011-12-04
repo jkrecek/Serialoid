@@ -5,7 +5,7 @@
 
 ImdbParser::ImdbParser(uint _imdbId) : QObject(NULL), imdbId_m(_imdbId)
 {
-    sUDownloader.Get(GetUrl(false).toString());
+    //sUDownloader.Get(GetUrl(false).toString());
     connect(&sUDownloader, SIGNAL(recievedData(QByteArray)), this, SLOT(parseAll(QByteArray)));
 }
 
@@ -35,13 +35,4 @@ QByteArray ImdbParser::GetContentInTag(const QByteArray& content, QByteArray tag
     return content.mid(start_idx, length);
 }
 
-QUrl ImdbParser::GetUrl(bool episode)
-{
-    QString url = "http://www.imdb.com/title/tt"+QString::number(imdbId_m);
-    if (episode)
-        url += "/episodes";
 
-    qDebug() << url;
-
-    return QUrl(url);
-}

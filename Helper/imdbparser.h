@@ -21,7 +21,6 @@ class ImdbParser : public QObject
         void parseAll(const QByteArray& content);
 
     private:
-        QUrl GetUrl(bool episode);
         QByteArray GetContentInTag(const QByteArray& content, QByteArray tag, int start = 0);
 
         uint imdbId_m;

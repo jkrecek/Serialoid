@@ -1,7 +1,7 @@
 QT += network
 CONFIG += console
 TEMPLATE = app
-INCLUDEPATH += Constants Helper IRC Series Profile
+INCLUDEPATH += Constants Helper IRC Series Profile WebParsing
 HEADERS += Constants/Formulas.h \
     Constants/ircconstants.h \
     Helper/commandparser.h \
@@ -14,6 +14,7 @@ HEADERS += Constants/Formulas.h \
     IRC/channel.h \
     IRC/message.h \
     IRC/spambot.h \
+    IRC/urldownloader.h \
     IRC/user.h \
     Series/episode.h \
     Series/season.h \
@@ -21,7 +22,10 @@ HEADERS += Constants/Formulas.h \
     Series/seriesmgr.h \
     Profile/profilemgr.h \
     Profile/profile.h \
-    IRC/urldownloader.h
+    WebParser/parsermgr.h \
+    WebParser/basicparser.h \
+    WebParser/tvparser.h
+
 
 SOURCES += main.cpp \
     Helper/commandparser.cpp \
@@ -32,7 +36,17 @@ SOURCES += main.cpp \
     IRC/channel.cpp \
     IRC/message.cpp \
     IRC/spambot.cpp \
+    IRC/urldownloader.cpp \
     IRC/user.cpp \
     Profile/profilemgr.cpp \
     Series/seriesmgr.cpp \
-    IRC/urldownloader.cpp
+    WebParser/parsermgr.cpp \
+    WebParser/basicparser.cpp \
+    WebParser/tvparser.cpp
+
+
+
+
+
+
+

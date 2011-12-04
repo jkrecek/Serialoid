@@ -14,7 +14,7 @@ UrlDownloader::~UrlDownloader()
 
 void UrlDownloader::Get(QString url)
 {
-    QNetworkRequest request(QUrl(url));
+    QNetworkRequest request = QNetworkRequest(QUrl(url));
     request.setRawHeader("User-Agent", "User-Agent:Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.106 Safari/535.2");
     manager_m->get(request);
 }

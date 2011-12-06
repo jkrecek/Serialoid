@@ -9,7 +9,7 @@ UrlDownloader::UrlDownloader()
 
 UrlDownloader::~UrlDownloader()
 {
-    //delete manager_m;
+    manager_m->deleteLater();
 }
 
 void UrlDownloader::Get(QUrl url)
@@ -22,4 +22,5 @@ void UrlDownloader::Get(QUrl url)
 void UrlDownloader::replyFinished(QNetworkReply * rep)
 {
     emit recievedData(rep->readAll());
+    rep->deleteLater();
 }

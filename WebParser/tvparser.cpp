@@ -1,5 +1,5 @@
 #include "tvparser.h"
 
-TVParser::TVParser()
+TVParser::TVParser(Series *_series, const QByteArray _content) : BasicParser(_series, _content)
 {
 }

@@ -1,6 +1,6 @@
 #include "basicparser.h"
 
-BasicParser::BasicParser()
+BasicParser::BasicParser(Series *_s, const QByteArray _c) : series_m(_s), content_m(_c)
 {
 }
 

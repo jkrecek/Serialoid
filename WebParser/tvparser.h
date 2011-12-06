@@ -6,7 +6,7 @@
 class TVParser : public BasicParser
 {
     public:
-        TVParser();
+        TVParser(Series *_s, const QByteArray _c);
 };
 
 #endif // TVPARSER_H

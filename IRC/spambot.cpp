@@ -20,17 +20,14 @@
 
 Bot::Bot(QObject* parent) : QObject(parent)
 {
-    sSeries.Load(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE);
-    sProfile.Load(ROUTE_PROFILE_FILE, ROUTE_ERROR_FILE);
-
-    //IMDBparser(lSeries_m["himym"], "http://www.imdb.com/title/tt0460649/");
-    new ImdbParser(460649);
-
     // connecting to servers
     server_m = new IRCServer("irc.rizon.net", 6667);
     server_m->connectAs("Serijaloid", "BOT", "BOT", "Kurva_tahnite_mi_z_nicku");
 
     server_m->joinChannel("#SoulWell");
+
+    sSeries.Load(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE);
+    sProfile.Load(ROUTE_PROFILE_FILE, ROUTE_ERROR_FILE);
 
     qsrand(sqrt(time(0))*2);
 

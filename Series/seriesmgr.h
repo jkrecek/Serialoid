@@ -15,6 +15,8 @@ class SeriesMgr
         void Load(QString _setting = QString(), QString _error = QString());
         Series* GetSeries(QString name) const { return lSeries_m.contains(name) ? lSeries_m[name] : NULL; }
         const SeriesMap& GetMap() const { return lSeries_m; }
+
+        Site GetSiteFromString(QString _s);
         void writeError(QString error);
 
     private:

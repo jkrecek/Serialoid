@@ -6,6 +6,16 @@
 #include "episode.h"
 #include "season.h"
 
+enum Site
+{
+    SITE_IMDB       = 0,
+    SITE_TV         = 1,
+
+    SITE_ERROR      = 99
+};
+
+#define SITE_COUNT 2
+
 typedef QMap<uint, Season*> SeasonMap;
 typedef QList<Episode*> EpisodeList;
 

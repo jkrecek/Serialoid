@@ -152,6 +152,15 @@ void SeriesMgr::Load(QString _series, QString _error)
     }
 }
 
+Site SeriesMgr::GetSiteFromString(QString _s)
+{
+    const QString& lower = _s.toLower();
+    if (lower.isEmpty())        return SITE_ERROR;
+    else if (lower == "imdb")   return SITE_IMDB;
+    else if (lower == "tv")     return SITE_TV;
+    else  return SITE_ERROR;
+}
+
 void SeriesMgr::writeError(QString error)
 {
     if (fError_m.isNull())

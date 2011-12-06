@@ -35,7 +35,8 @@ void SeriesMgr::Load(QString _series, QString _error)
         if (setting.empty())
             continue;
 
-        if (setting[0] == "create")
+        const QString& pFirst = setting.value(0);
+        if (pFirst == "create")
         {
             if (setting.size() == 2)
             {
@@ -53,18 +54,20 @@ void SeriesMgr::Load(QString _series, QString _error)
             continue;
         }
 
-        Series* series = lSeries_m.value(setting[0]);
+        Series* series = lSeries_m.value(pFirst);
         if (!series)
         {
-            writeError("Series codenamed '"+setting[0]+"' was not found!");
+            writeError("Series codenamed '"+pFirst+"' was not found!");
             continue;
         }
 
-        if (setting[1] == "info")
+        const QString& pSecond = setting.value(1);
+
+        if (pSecond == "info")
             series->SetInfo(line.mid(line.indexOf(setting[2])));
-        else if (setting[1] == "titles")
+        else if (pSecond == "titles")
             series->SetTitles(line.mid(line.indexOf(setting[2])).split(",", QString::SkipEmptyParts));
-        else if (setting[1] == "season")
+        else if (pSecond == "season")
         {
             if (setting[2] == "add")
             {
@@ -81,7 +84,7 @@ void SeriesMgr::Load(QString _series, QString _error)
                 }
                 else
                 {
-                    writeError("Command 'season add' for series codenamed '"+setting[0]+"' has wrong number of parameters (has "+QString::number(setting.size())+" instead of 4 or 5)");
+                    writeError("Command 'season add' for series codenamed '"+pFirst+"' has wrong number of parameters (has "+QString::number(setting.size())+" instead of 4 or 5)");
                     continue;
                 }
             }
@@ -97,13 +100,13 @@ void SeriesMgr::Load(QString _series, QString _error)
                     }
                     else
                     {
-                        writeError("Command 'season seasonId' for series codenamed '"+setting[0]+"' unable to found season "+QString::number(seasonId));
+                        writeError("Command 'season seasonId' for series codenamed '"+pFirst+"' unable to found season "+QString::number(seasonId));
                         continue;
                     }
                 }
                 else
                 {
-                    writeError("Command 'season seasonId' for series codenamed '"+setting[0]+"' has wrong number of parameters (has "+QString::number(setting.size())+" instead of 5 or more)");
+                    writeError("Command 'season seasonId' for series codenamed '"+pFirst+"' has wrong number of parameters (has "+QString::number(setting.size())+" instead of 5 or more)");
                     continue;
                 }
             }
@@ -111,19 +114,19 @@ void SeriesMgr::Load(QString _series, QString _error)
         }
         else
         {
-            EpisodeOrder epO(setting[1]);
+            EpisodeOrder epO(pSecond);
             if (epO.isSet())
             {
                 if (setting.size() < 4)
                 {
-                    writeError("Adding episode for series codenamed '"+setting[0]+"' has wrong number of parameters (has "+QString::number(setting.size())+" instead of 4 or more)");
+                    writeError("Adding episode for series codenamed '"+pFirst+"' has wrong number of parameters (has "+QString::number(setting.size())+" instead of 4 or more)");
                     continue;
                 }
 
                 Season* season = series->GetSeason(epO.season);
                 if (!season)
                 {
-                    writeError("Adding episode for series codenamed '"+setting[0]+"' unable to found season "+QString::number(epO.season));
+                    writeError("Adding episode for series codenamed '"+pFirst+"' unable to found season "+QString::number(epO.season));
                     continue;
                 }
 

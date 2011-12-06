@@ -3,14 +3,7 @@
 
 #include <QObject>
 #include <QUrl>
-
-enum Sites
-{
-    SITE_IMDB       = 0,
-    SITE_TV         = 1
-};
-
-#define SITE_COUNT 2
+#include "series.h"
 
 enum Details
 {
@@ -21,20 +14,29 @@ enum Details
 
 #define DETAILS_COUNT 3
 
+//           link     series-codename
+typedef QMap<QString, QString> LinkMap;
+
 class ParserMgr : public QObject
 {
     Q_OBJECT
 
     public:
         ParserMgr();
-        ~ParserMgr();
+        ~ParserMgr() {}
 
-        QUrl GetUrl();
+        Site GetSiteFromLink(QString link);
+
     signals:
+        void allParsed();
 
     public slots:
+        void handleRecieved(QUrl url, const QByteArray& content);
 
     private:
+        LinkMap parseMap_m;
+        LinkMap::Iterator currentItr_m;
+
 
 
 };

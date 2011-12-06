@@ -9,6 +9,7 @@
 #include "profilemgr.h"
 #include "series.h"
 #include "user.h"
+#include "parsermgr.h"
 
 class IRCServer;
 class ProfileMgr;
@@ -43,6 +44,8 @@ class Bot : public QObject
 
     private:
         IRCServer*      server_m;
+        ParserMgr*      parser_m;
+
         CommandParser*  command;
         ChannelMuteMap  muteMap_m;
 };

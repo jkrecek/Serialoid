@@ -29,6 +29,10 @@ Bot::Bot(QObject* parent) : QObject(parent)
     sSeries.Load(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE);
     sProfile.Load(ROUTE_PROFILE_FILE, ROUTE_ERROR_FILE);
 
+    parser_m = new ParserMgr();
+    // need to create slot to be called when everything is parsed
+    //connect(parser_m, SIGNAL(allParsed()), this, SLOT());
+
     qsrand(sqrt(time(0))*2);
 
     connect(server_m, SIGNAL(messageReceived(Message)), this, SLOT(handleReceivedMessage(Message)));

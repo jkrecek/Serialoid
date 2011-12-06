@@ -18,6 +18,7 @@ enum Site
 
 typedef QMap<uint, Season*> SeasonMap;
 typedef QList<Episode*> EpisodeList;
+typedef QList<QString> LinkList;
 
 class Series
 {
@@ -31,6 +32,7 @@ class Series
             foreach(QString s, l)
                 seriesTitles_m.push_back(s.trimmed());
         }
+        void AddLink(QString _l) { links_m.push_back(_l); }
 
         SeasonMap& GetSeasons() { return lSeasons_m; }
         Season* GetSeason(uint Id) const { return lSeasons_m.value(Id); }
@@ -69,12 +71,14 @@ class Series
 
             return allEp;
         }
+        LinkList GetLinks() const { return links_m; }
 
     private:
         QString seriesName_m;
         QStringList seriesTitles_m;
         QString info_m;
         SeasonMap lSeasons_m;
+        LinkList links_m;
 };
 
 #endif // SERIES_H

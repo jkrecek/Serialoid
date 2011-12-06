@@ -67,6 +67,13 @@ void SeriesMgr::Load(QString _series, QString _error)
             series->SetInfo(line.mid(line.indexOf(setting[2])));
         else if (pSecond == "titles")
             series->SetTitles(line.mid(line.indexOf(setting[2])).split(",", QString::SkipEmptyParts));
+        else if (pSecond == "link")
+        {
+            if (setting.size() < 3)
+                continue;
+
+            series->AddLink(setting[2].trimmed());
+        }
         else if (pSecond == "season")
         {
             if (setting[2] == "add")

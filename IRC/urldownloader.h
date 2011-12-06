@@ -20,7 +20,8 @@ class UrlDownloader : public QObject
         void Download(QString url) { return Download(QUrl(url)); }
 
     signals:
-        void recievedData(const QByteArray& data);
+        //                    url         data
+        void downloadComplete(QUrl, const QByteArray&);
 
     private slots:
         void replyFinished(QNetworkReply*);

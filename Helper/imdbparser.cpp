@@ -6,7 +6,7 @@
 ImdbParser::ImdbParser(uint _imdbId) : QObject(NULL), imdbId_m(_imdbId)
 {
     //sUDownloader.Get(GetUrl(false).toString());
-    connect(&sUDownloader, SIGNAL(recievedData(QByteArray)), this, SLOT(parseAll(QByteArray)));
+    //connect(&sUDownloader, SIGNAL(recievedData(QByteArray)), this, SLOT(parseAll(QByteArray)));
 }
 
 ImdbParser::~ImdbParser()

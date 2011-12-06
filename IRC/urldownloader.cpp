@@ -12,7 +12,7 @@ UrlDownloader::~UrlDownloader()
     manager_m->deleteLater();
 }
 
-void UrlDownloader::Get(QUrl url)
+void UrlDownloader::Download(QUrl url)
 {
     QNetworkRequest request = QNetworkRequest(QUrl(url));
     request.setRawHeader("User-Agent", "User-Agent:Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.106 Safari/535.2");
@@ -21,6 +21,6 @@ void UrlDownloader::Get(QUrl url)
 
 void UrlDownloader::replyFinished(QNetworkReply * rep)
 {
-    emit recievedData(rep->readAll());
+    emit downloadComplete(rep->url(), rep->readAll());
     rep->deleteLater();
 }

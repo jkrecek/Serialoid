@@ -1,7 +1,7 @@
 QT += network
 CONFIG += console
 TEMPLATE = app
-INCLUDEPATH += Constants Helper IRC Series Profile WebParsing
+INCLUDEPATH += Constants Helper IRC Series Profile WebParser
 HEADERS += Constants/Formulas.h \
     Constants/ircconstants.h \
     Helper/commandparser.h \

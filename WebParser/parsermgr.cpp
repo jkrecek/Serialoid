@@ -57,9 +57,11 @@ void ParserMgr::handleRecieved(QUrl url, const QByteArray &content)
     switch(GetSiteFromLink(oldLink))
     {
         case SITE_TV:
-            TVParser(currSeries, content);
+            currSeries->ParseFromTV(content);
             break;
         case SITE_IMDB:
+            currSeries->ParseFromIMDB(content);
+            break;
         default:
             break;
     }

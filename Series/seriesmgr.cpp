@@ -87,7 +87,7 @@ void SeriesMgr::Load(QString _series, QString _error)
 
                     Season* s = new Season(seasonId);
                     s->SetHourdiff(setting.size() == 5 ? setting[4].toInt() : 0);
-                    seaM[seasonId] = s;
+                    seaM.insert(seasonId, s);
                 }
                 else
                 {

@@ -42,11 +42,5 @@ SOURCES += main.cpp \
     Series/seriesmgr.cpp \
     WebParser/parsermgr.cpp \
     WebParser/basicparser.cpp \
-    WebParser/tvparser.cpp
-
-
-
-
-
-
-
+    WebParser/tvparser.cpp \
+    Series/series.cpp

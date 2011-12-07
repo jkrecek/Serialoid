@@ -1,7 +1,6 @@
 #include "parsermgr.h"
 #include "seriesmgr.h"
 #include "urldownloader.h"
-#include "tvparser.h"
 #include <QDebug>
 
 ParserMgr::ParserMgr()

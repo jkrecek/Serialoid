@@ -7,7 +7,6 @@
 #include "episodeorder.h"
 #include "Formulas.h"
 #include "channel.h"
-#include "imdbparser.h"
 #include "ircconstants.h"
 #include "ircserver.h"
 #include "seriesmgr.h"

@@ -6,7 +6,6 @@ HEADERS += Constants/Formulas.h \
     Constants/ircconstants.h \
     Helper/commandparser.h \
     Helper/episodeorder.h \
-    Helper/imdbparser.h \
     Helper/messageparser.h \
     Helper/singleton.h \
     Helper/timestamp.h \
@@ -22,14 +21,11 @@ HEADERS += Constants/Formulas.h \
     Series/seriesmgr.h \
     Profile/profilemgr.h \
     Profile/profile.h \
-    WebParser/parsermgr.h \
-    WebParser/basicparser.h \
-    WebParser/tvparser.h
+    WebParser/parsermgr.h
 
 
 SOURCES += main.cpp \
     Helper/commandparser.cpp \
-    Helper/imdbparser.cpp \
     Helper/messageparser.cpp \
     Helper/timestamp.cpp \
     IRC/ircserver.cpp \
@@ -39,8 +35,6 @@ SOURCES += main.cpp \
     IRC/urldownloader.cpp \
     IRC/user.cpp \
     Profile/profilemgr.cpp \
+    Series/series.cpp \
     Series/seriesmgr.cpp \
-    WebParser/parsermgr.cpp \
-    WebParser/basicparser.cpp \
-    WebParser/tvparser.cpp \
-    Series/series.cpp
+    WebParser/parsermgr.cpp

@@ -2,7 +2,6 @@
 #include "seriesmgr.h"
 #include <QFile>
 #include <QTextStream>
-#include <QDebug>
 
 void SeriesMgr::Load(QString _series, QString _error)
 {

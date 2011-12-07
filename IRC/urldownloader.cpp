@@ -1,4 +1,3 @@
-#include <QDebug>
 #include "urldownloader.h"
 
 UrlDownloader::UrlDownloader()

@@ -34,8 +34,8 @@ class Timestamp
         bool Aired()        const { return isCorrect() && unix_m < time(0); }
         bool toBeAired()    const { return isCorrect() && unix_m > time(0); }
 
-        uint timeTo()       const { return toBeAired() ? unix_m - time(0) : INT_MAX; }
-        uint timeFrom()     const { return     Aired() ? time(0) - unix_m : INT_MAX; }
+        int timeTo()        const { return toBeAired() ? unix_m - time(0) : INT_MAX; }
+        int timeFrom()      const { return     Aired() ? time(0) - unix_m : INT_MAX; }
 
         QString writeGMT()  const;
         QString correctTimeValue(uint val) const;

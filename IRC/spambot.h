@@ -4,20 +4,16 @@
 #include <QMap>
 #include <QObject>
 #include <QStringList>
-#include <QTime>
 #include "commandparser.h"
 #include "message.h"
 #include "profilemgr.h"
 #include "series.h"
 #include "user.h"
 #include "parsermgr.h"
-#include "updater.h"
-
 
 class IRCServer;
 class ProfileMgr;
 class CommandParser;
-class Updater;
 
 typedef QMap<QString, uint> ChannelMuteMap;
 
@@ -34,7 +30,6 @@ class Bot : public QObject
         void GenerateNewKey();
 
         QList<User*> Users;
-        void Update(const uint diff);
 
     protected:
         void HandleTimeComparison(const Message& message);
@@ -47,16 +42,14 @@ class Bot : public QObject
     private slots:
         void handleReceivedMessage(const Message& message);
         void parsingComplete();
+        void UpdateBot(const int diff);
 
     private:
         IRCServer*      server_m;
         ParserMgr*      parser_m;
-        Updater*        updater_m;
 
         CommandParser*  command_m;
         ChannelMuteMap  muteMap_m;
 };
-
-#define sTime Singleton<QTime>::Instance()
 
 #endif

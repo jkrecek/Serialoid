@@ -1,5 +1,5 @@
 #include "parsermgr.h"
-#include "spambot.h"
+#include "bottime.h"
 #include "urldownloader.h"
 
 ParserMgr::ParserMgr()
@@ -54,7 +54,7 @@ void ParserMgr::handleRecieved(QUrl /*url*/, const QByteArray &content)
         sUDownloader.Download(url);
     }
 
-    int start_time = sTime.elapsed();
+    int start_time = sBotTime.getMSTime();
     switch(GetSiteFromLink(oldLink))
     {
         case SITE_TV:
@@ -67,7 +67,8 @@ void ParserMgr::handleRecieved(QUrl /*url*/, const QByteArray &content)
             break;
     }
 
-    PrintOut(now_time, "Series "+currSeries->GetName()+" successfully parsed in "+QString::number(sTime.elapsed()-start_time)+" ms!");
+    int time_diff = sBotTime.getMSTime() - start_time;
+    PrintOut(now_time, "Series "+currSeries->GetName()+" successfully parsed in "+QString::number(time_diff)+"ms!");
 
     if (parseMap_m.empty())
     {

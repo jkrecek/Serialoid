@@ -12,6 +12,7 @@
 #include "seriesmgr.h"
 #include "spambot.h"
 #include "user.h"
+#include "bottime.h"
 
 #define ROUTE_SERIES_FILE "C://series.txt"
 #define ROUTE_PROFILE_FILE "C://profile.txt"
@@ -19,8 +20,9 @@
 
 Bot::Bot(QObject* parent) : QObject(parent)
 {
-    sTime.start();
-    updater_m = new Updater(this);
+    // initialize time updating
+    sBotTime;
+    connect(&sBotTime, SIGNAL(Update(int)), this, SLOT(UpdateBot(int)));
 
     // connecting to servers
     server_m = new IRCServer("irc.rizon.net", 6667);
@@ -464,7 +466,7 @@ uint Bot::GetCooldownEndTime(const Message &message)
     return 0;
 }
 
-void Bot::Update(const uint diff)
+void Bot::UpdateBot(const int diff)
 {
     foreach(Series* series, sSeries.GetMap())
         foreach(Episode* ep, series->GetAllEpisodes())

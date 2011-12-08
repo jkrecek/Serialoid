@@ -204,7 +204,7 @@ void Bot::HandleSeriesCommands(const Message &message)
                     if (Episode* episode = series->GetEpisodeByOrder(epOrder))
                     {
                         server_m->sendMessageToChannel(message.senderChannel(), episode->GetAirString());
-                        if (command->GetCommandOnPos(COMMAND_INFO))
+                        if (command->GetCommandOnPos(4) == COMMAND_INFO)
                         {
                             if (!episode->GetInfo().isEmpty())
                             {

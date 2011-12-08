@@ -19,7 +19,8 @@ ParserMgr::ParserMgr()
 
     // start downloading
     currentItr_m = parseMap_m.begin();
-    sUDownloader.Download(currentItr_m.key());
+    QUrl url = GetUrl(currentItr_m.key(), DETAILS_EPISODES);
+    sUDownloader.Download(url);
 }
 
 Site ParserMgr::GetSiteFromLink(QString link)
@@ -31,17 +32,17 @@ Site ParserMgr::GetSiteFromLink(QString link)
     return sSeries.GetSiteFromString(siteString);
 }
 
-void ParserMgr::handleRecieved(QUrl url, const QByteArray &content)
+void ParserMgr::handleRecieved(QUrl /*url*/, const QByteArray &content)
 {
     QString oldLink = currentItr_m.key();
-    if (url.toString() != oldLink)
-    {
-        qDebug() << "Something went terribly wrong, recieved another url then expected!";
-        return;
-    }
+    // must be rewriten, oldLink contains basic link, returned url contains specific link to episodes, rating, etc.
+    //if (url.toString() != oldLink)
+    //{
+    //    qDebug() << "Something went terribly wrong, recieved another url then expected! Expected '"+oldLink+"' and recieved '"+url.toString()+"'";
+    //    return;
+    //}
 
     Series* currSeries = sSeries.GetSeries(currentItr_m.value());
-
     // all needed values from iterator saved, now we can erase it
     parseMap_m.erase(currentItr_m);
 
@@ -50,7 +51,8 @@ void ParserMgr::handleRecieved(QUrl url, const QByteArray &content)
         // if map is not empty find now iterator ..
         currentItr_m = parseMap_m.begin();
         // .. and start downloading
-        sUDownloader.Download(currentItr_m.key());
+        QUrl url = GetUrl(currentItr_m.key(), DETAILS_EPISODES);
+        sUDownloader.Download(url);
     }
 
     switch(GetSiteFromLink(oldLink))
@@ -71,4 +73,37 @@ void ParserMgr::handleRecieved(QUrl url, const QByteArray &content)
         // if completed let know Bot class
         emit allParsed();
     }
+}
+
+QUrl ParserMgr::GetUrl(QString baseUrl, Details details)
+{
+    Site site = GetSiteFromLink(baseUrl);
+    QString url = baseUrl;
+    switch(details)
+    {
+        case DETAILS_DEFAULT:           // just return baseUrl
+            break;
+
+        case DETAILS_EPISODES:
+        {
+            if (!url.endsWith("/"))     // if url doesn't ends with slash add it
+                url.append("/");
+
+            switch(site)
+            {
+                case SITE_TV:
+                    url.append("season/?season=all");
+                    break;
+                case SITE_IMDB:
+                    url.append("episodes");
+                    break;
+                default:
+                    break;
+            }
+        }
+        default:
+            break;
+    }
+
+    return QUrl(url);
 }

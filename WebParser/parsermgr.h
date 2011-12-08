@@ -26,6 +26,7 @@ class ParserMgr : public QObject
         ~ParserMgr() {}
 
         Site GetSiteFromLink(QString link);
+        QUrl GetUrl(QString baseUrl, Details details);
 
     signals:
         void allParsed();
@@ -36,9 +37,6 @@ class ParserMgr : public QObject
     private:
         LinkMap parseMap_m;
         LinkMap::Iterator currentItr_m;
-
-
-
 };
 
 #endif // PARSERMGR_H

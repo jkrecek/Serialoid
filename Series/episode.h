@@ -23,7 +23,7 @@ class Episode
         QString GetAirString() const
         {
             QString air = Air_m.passed() ? "was aired" : "will be aired in "+Air_m.getTo();
-            return GetOrderString()+" \""+Name_m+"\" "+air+" at "+Air_m.write(FORMAT_DAY_S_TIME_DATE_GMT);
+            return GetOrderString()+" \""+Name_m+"\" "+air+" at "+Air_m.write(FORMAT_DAY_S_DATE_TIME_GMT);
         }
 
     private:

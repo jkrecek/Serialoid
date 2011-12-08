@@ -25,7 +25,7 @@ enum Format
 class Timestamp
 {
     public:
-        Timestamp(uint _unix = time(0), int _diff = BOT_GMT);
+        Timestamp(int _unix = time(0), int _diff = BOT_GMT);
         Timestamp(QString _str1, QString _str2, int _diff = BOT_GMT);
 
         QString writeGMT() const;
@@ -35,15 +35,18 @@ class Timestamp
         QString getTime() const;
         QString getDate() const;
         QString getDay(int pos = -1) const;
-        uint getUnix() const { return unix_m; }
+
+        int getUnix()   const { return unix_m; }
+        int getGMT()    const { return gmtDiff_m; }
 
         QString getTo() const;
 
-        bool passed() const { return unix_m < uint(time(0)); }
-        uint timeTo() const { return !passed() ? unix_m - uint(time(0)) : 0; }
-        uint workUnix() const { return unix_m+(gmtDiff_m+IS_DST)*HOUR_S; }
+        bool passed()  const { return unix_m < time(0); }
+        uint timeTo()  const { return !passed() ? unix_m - time(0) : 0; }
+        int workUnix() const { return unix_m+(gmtDiff_m+IS_DST)*HOUR_S; }
+
     private:
-        uint unix_m;
+        int unix_m;
         int gmtDiff_m;
 };
 

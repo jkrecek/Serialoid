@@ -113,7 +113,8 @@ void Bot::HandleSeriesCommands(const Message &message)
         case COMMAND_RELOAD:
         {
             sSeries.Load();
-            server_m->sendMessageToChannel(message.senderChannel(), "Series reloaded succesfully");
+            server_m->sendMessageToChannel(message.senderChannel(), "Series reloaded succesfully, start parsing now");
+            parser_m = new ParserMgr();
             break;
         }
         case COMMAND_TODAY:

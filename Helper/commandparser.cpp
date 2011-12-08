@@ -12,7 +12,7 @@ SeriesCommand CommandParser::GetCommandOnPos(uint pos) const
     if (GetSize() < pos)
         return COMMAND_NONE;
 
-    const QString& commandString = GetMessagePart(pos);
+    const QString& commandString = GetMessagePart(pos).toLower();
     if (commandString.isNull())                         return COMMAND_NONE;
     else if (commandString == "compare")                return COMMAND_COMPARE;
     else if (commandString == "series")                 return COMMAND_SERIES;

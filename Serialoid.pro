@@ -14,6 +14,7 @@ HEADERS += Constants/Formulas.h \
     IRC/message.h \
     IRC/spambot.h \
     IRC/urldownloader.h \
+    IRC/updater.h \
     IRC/user.h \
     Series/episode.h \
     Series/season.h \
@@ -34,6 +35,7 @@ SOURCES += main.cpp \
     IRC/spambot.cpp \
     IRC/urldownloader.cpp \
     IRC/user.cpp \
+    IRC/updater.cpp \
     Profile/profilemgr.cpp \
     Series/series.cpp \
     Series/seriesmgr.cpp \

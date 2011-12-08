@@ -21,7 +21,7 @@
 #define TITLES "titles"
 
 #define BOT_GMT 1
-#define IS_DST true
+#define IS_DST false
 
 #define DAY_S 86400
 #define DAY_H 24

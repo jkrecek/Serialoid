@@ -37,6 +37,7 @@ class IRCServer : public QObject
         void changeNickName(const QString& nickName);
         void sendMessageToChannel(const QString& channelName, const QString& messageContent);
         void sendMessageToUser(const QString& userName, const QString& messageContent);
+        void sendNoticeToUser(const QString& userName, const QString& messageContent);
         void sendActionToChannel(const QString& channelName, const QString& messageContent);
         void sendActionToUser(const QString& userName, const QString& messageContent);
         void send(const QByteArray& rawData);

@@ -86,4 +86,20 @@ inline void PrintOut(QString nowTime, QString str)
     printf("%s: %s\n", nowTime.toStdString().c_str(), str.toStdString().c_str());
 }
 
+namespace Constant
+{
+    static QChar tagStart = 60;
+    static QChar slash = 47;
+    static QChar newline = 10;
+    static QChar comma = 44;
+
+    static QString se = "Season";
+    static QString ep = "Episode";
+    static QString air= "Aired:";
+
+    static int se_s = se.size();
+    static int ep_s = ep.size();
+    static int air_s= air.size();
+}
+
 #endif // FORMULAS_H

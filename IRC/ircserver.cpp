@@ -152,8 +152,15 @@ void IRCServer::addPrivateMessageToQueue(const QString& userName, const QString&
     QByteArray next = messageContent.toUtf8();
     while(!next.isNull())
     {
-        sendCommandAsap(begin+next.left(next.lastIndexOf(" ", allowedSize)));
-        next = next.mid(next.lastIndexOf(" ", allowedSize));
+        if (next.size() <= allowedSize)
+        {
+            sendCommandAsap(begin+next.trimmed());
+            break;
+        }
+
+        int idx = next.lastIndexOf(" ", allowedSize);
+        sendCommandAsap(begin+next.left(idx).trimmed());
+        next = next.mid(idx);
     }
 }
 

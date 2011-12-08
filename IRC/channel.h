@@ -18,6 +18,7 @@ class Channel : public QObject
 
         QList<User*> channelUsers();
         QList<QString> channelUsersNicks();
+        QString getName() const { return channelName_m; }
 
     private slots:
         void handleMessage(const Message& message);

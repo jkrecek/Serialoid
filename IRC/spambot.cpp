@@ -21,20 +21,19 @@ Bot::Bot(QObject* parent) : QObject(parent)
 {
     // connecting to servers
     server_m = new IRCServer("irc.rizon.net", 6667);
-    server_m->connectAs("Serijaloid", "BOT", "BOT", "Kurva_tahnite_mi_z_nicku");
+    server_m->connectAs("Serialoid", "BOT", "BOT", "Kurva_tahnite_mi_z_nicku");
 
     server_m->joinChannel("#SoulWell");
+    connect(server_m, SIGNAL(messageReceived(Message)), this, SLOT(handleReceivedMessage(Message)));
 
     sSeries.Load(ROUTE_SERIES_FILE, ROUTE_ERROR_FILE);
     sProfile.Load(ROUTE_PROFILE_FILE, ROUTE_ERROR_FILE);
 
+    // parser must be set after loading loacal files
     parser_m = new ParserMgr();
-    // need to create slot to be called when everything is parsed
-    //connect(parser_m, SIGNAL(allParsed()), this, SLOT());
+    connect(parser_m, SIGNAL(allParsed()), this, SLOT(parsingComplete()));
 
     qsrand(sqrt(time(0))*2);
-
-    connect(server_m, SIGNAL(messageReceived(Message)), this, SLOT(handleReceivedMessage(Message)));
 }
 
 void Bot::handleReceivedMessage(const Message& message)
@@ -432,4 +431,10 @@ bool Bot::CanAccessSeriesCommands(const Message &message)
         return true;
     }
     return false;
+}
+
+void Bot::parsingComplete()
+{
+    foreach(Channel* channel, server_m->GetAllJoinedChannels())
+        server_m->sendMessageToChannel(channel->getName(), "All series loaded!");
 }

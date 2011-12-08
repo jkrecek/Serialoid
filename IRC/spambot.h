@@ -41,6 +41,7 @@ class Bot : public QObject
 
     private slots:
         void handleReceivedMessage(const Message& message);
+        void parsingComplete();
 
     private:
         IRCServer*      server_m;

@@ -1,5 +1,6 @@
 #include "parsermgr.h"
 #include "bottime.h"
+#include "seriesmgr.h"
 #include "urldownloader.h"
 
 ParserMgr::ParserMgr()

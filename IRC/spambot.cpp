@@ -468,9 +468,10 @@ uint Bot::GetCooldownEndTime(const Message &message)
 
 void Bot::UpdateBot(const int diff)
 {
+    int toSecs = float(diff)/1000;
     foreach(Series* series, sSeries.GetMap())
         foreach(Episode* ep, series->GetAllEpisodes())
-            if (ep->GetAir().timeFrom() < diff)
+            if (ep->GetAir().timeFrom() < toSecs)
                 server_m->sendMessageToChannel("#soulwell", series->GetMainTitle()+": "+ep->GetJustAiredString());
 }
 

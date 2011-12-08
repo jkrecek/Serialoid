@@ -31,6 +31,7 @@ class Series
         void SetInfo(QString info);
         void SetTitles(QStringList l);
         void AddLink(QString _l);
+        void SetAir(QString unix, int gmt_diff);
 
         SeasonMap& GetSeasons()               { return lSeasons_m; }
         QStringList& GetTitles()              { return seriesTitles_m; }
@@ -39,6 +40,7 @@ class Series
         QString GetName()               const { return seriesName_m; }
         QString GetInfo()               const { return info_m; }
         LinkList GetLinks()             const { return links_m; }
+        Timestamp GetDailyAir()         const { return airHour_m; }
 
         Episode* GetEpisodeByOrder(EpisodeOrder order) const;
         Episode* GetNextEpisode() const;
@@ -48,7 +50,12 @@ class Series
         /***  PARSING START  ***/
 
         // basic helpers for parsing
-        QByteArray GetContentInTag(const QByteArray& content, QByteArray tag, int start = 0);
+        QByteArray GetSimpleContent(const QByteArray& content, QByteArray tag, int start = 0, bool forward = true);
+        QByteArray GetAdvancedContent(const QByteArray& content, QByteArray tag, int& idx);
+        //QByteArray GetAllTags(const QByteArray& content, QByteArray tag);
+
+        QString GetTitleFromHead(const QByteArray& content, Site site);
+
         void ParseFromTV(const QByteArray& content);
         void ParseFromIMDB(const QByteArray& content);
 
@@ -61,6 +68,7 @@ class Series
         QString     info_m;
         SeasonMap   lSeasons_m;
         LinkList    links_m;
+        Timestamp   airHour_m;
 };
 
 #endif // SERIES_H

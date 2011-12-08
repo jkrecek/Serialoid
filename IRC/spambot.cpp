@@ -88,6 +88,12 @@ void Bot::HandleTimeComparison(const Message &message)
 
 void Bot::HandleSeriesCommands(const Message &message)
 {
+    if (parser_m)       // if has valid pointer to parser then bot is currently parsing, disallow accesing to series
+    {
+        server_m->sendMessageToChannel(message.senderChannel(), "Sorry, I'm currently parsing, please ask me when I'm finished");
+        return;
+    }
+
     switch(command->GetCommandOnPos(2))
     {
         case COMMAND_LIST:
@@ -240,6 +246,12 @@ void Bot::HandleSeriesCommands(const Message &message)
 
 void Bot::HandleProfileCommands(const Message &message)
 {
+    if (parser_m)       // if has valid pointer to parser then bot is currently parsing, disallow accesing to series
+    {
+        server_m->sendMessageToChannel(message.senderChannel(), "Sorry, I'm currently parsing, please ask me when I'm finished");
+        return;
+    }
+
     switch(command->GetCommandOnPos(2))
     {
         case COMMAND_ADD:

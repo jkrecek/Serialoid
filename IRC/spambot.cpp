@@ -214,6 +214,14 @@ void Bot::HandleSeriesCommands(const Message &message)
                             else
                                 server_m->sendMessageToUser(message.senderNick(), "No info for episode "+epOrder.GetNormalLook()+" found!");
                         }
+                        if (command->GetCommandOnPos(4) == COMMAND_RATING)
+                        {
+                            const float& rating = episode->GetRating();
+                            if (rating)
+                                server_m->sendMessageToChannel(message.senderChannel(), "Episode rating according to TV.com is "+QString::number(rating));
+                            else
+                                server_m->sendMessageToChannel(message.senderChannel(), "Episode rating not found");
+                        }
                     }
                     else
                         server_m->sendMessageToChannel(message.senderChannel(), "Episode "+epOrder.GetNormalLook()+" not found!");

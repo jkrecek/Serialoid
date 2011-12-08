@@ -28,6 +28,7 @@ SeriesCommand CommandParser::GetCommandOnPos(uint pos) const
     else if (commandString == "add")                    return COMMAND_ADD;
     else if (commandString == "pass")                   return COMMAND_PASS;
     else if (commandString == "edit")                   return COMMAND_EDIT;
+    else if (commandString == "rating")                 return COMMAND_RATING;
     else if (sSeries.GetMap().contains(commandString))  return COMMAND_IS_SERIES;
     else if (sProfile.HasProfile(commandString))        return COMMAND_IS_PROFILE;
     else if (EpisodeOrder(commandString).isSet())       return COMMAND_EP_ORDER;

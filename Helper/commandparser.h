@@ -25,7 +25,8 @@ enum SeriesCommand
     COMMAND_EDIT,
     COMMAND_IS_SERIES,
     COMMAND_IS_PROFILE,
-    COMMAND_EP_ORDER
+    COMMAND_EP_ORDER,
+    COMMAND_RATING
 };
 
 class CommandParser

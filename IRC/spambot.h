@@ -4,6 +4,7 @@
 #include <QMap>
 #include <QObject>
 #include <QStringList>
+#include <QTime>
 #include "commandparser.h"
 #include "message.h"
 #include "profilemgr.h"
@@ -50,5 +51,7 @@ class Bot : public QObject
         CommandParser*  command;
         ChannelMuteMap  muteMap_m;
 };
+
+#define sTime Singleton<QTime>::Instance()
 
 #endif

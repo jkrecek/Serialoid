@@ -19,6 +19,8 @@
 
 Bot::Bot(QObject* parent) : QObject(parent)
 {
+    sTime.start();
+
     // connecting to servers
     server_m = new IRCServer("irc.rizon.net", 6667);
     server_m->connectAs("Serialoid", "BOT", "BOT", "Kurva_tahnite_mi_z_nicku");

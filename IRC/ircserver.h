@@ -48,6 +48,7 @@ class IRCServer : public QObject
         void opSelf(const QString& channel);
         void identify(const QString& pass);
         void kick(const QString& nick, const QString& channel, const QString& reason = QString());
+        QMap<QString, Channel*> GetAllJoinedChannels() const { return joinedChannels_m; }
 
     signals:
         void messageReceived(const Message& message);

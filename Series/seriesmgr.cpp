@@ -73,19 +73,23 @@ void SeriesMgr::Load(QString _series, QString _error)
 
             series->AddLink(setting[2].trimmed());
         }
+        else if (pSecond == "air")
+        {
+            if (setting.size() == 3 || setting.size() == 4)
+                series->SetAir(setting.value(2), setting.size() == 4 ? setting.value(3).toInt() : BOT_GMT);
+        }
         else if (pSecond == "season")
         {
             if (setting[2] == "add")
             {
-                if (setting.size() == 4 || setting.size() == 5)
+                if (setting.size() == 4)
                 {
                     SeasonMap& seaM = series->GetSeasons();
-                    uint seasonId = setting[3].toUInt();
+                    uint seasonId = setting.value(3).toUInt();
                     if (!seasonId || series->GetSeason(seasonId))
                         continue;
 
                     Season* s = new Season(seasonId);
-                    s->SetHourdiff(setting.size() == 5 ? setting[4].toInt() : 0);
                     seaM.insert(seasonId, s);
                 }
                 else
@@ -145,7 +149,7 @@ void SeriesMgr::Load(QString _series, QString _error)
 
                     episode = new Episode(epO);
                     episode->SetName(splitList[1]);
-                    episode->SetAir(Timestamp(stampPart[0], stampPart[1], season->GetHourDiff()));
+                    episode->SetAir(Timestamp(stampPart[0], stampPart[1], series->GetDailyAir().getGMT()));
                     episodes[epO.episode] = episode;
                 }
                 else

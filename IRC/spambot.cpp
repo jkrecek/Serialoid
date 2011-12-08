@@ -457,5 +457,9 @@ bool Bot::CanAccessSeriesCommands(const Message &message)
 void Bot::parsingComplete()
 {
     foreach(Channel* channel, server_m->GetAllJoinedChannels())
-        server_m->sendMessageToChannel(channel->getName(), "All series loaded!");
+        server_m->sendMessageToChannel("#"+channel->getName(), "All series loaded!");
+
+    // parser is not needed anymore, we can delete it now
+    parser_m->deleteLater();
+    parser_m = NULL;
 }

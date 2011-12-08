@@ -66,6 +66,8 @@ void ParserMgr::handleRecieved(QUrl /*url*/, const QByteArray &content)
             break;
     }
 
+    PrintOut("Series "+currSeries->GetName()+" successfully parsed!");
+
     if (parseMap_m.empty())
     {
         currentItr_m = NULL;

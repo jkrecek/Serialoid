@@ -103,7 +103,7 @@ void Bot::HandleSeriesCommands(const Message &message)
     {
         case COMMAND_LIST:
         {
-            if (lSeries_m.empty())
+            if (sSeries.GetMap().empty())
             {
                 server_m->sendMessageToChannel(message.senderChannel(), "No series found, please check your series.txt file.");
                 break;
@@ -466,7 +466,7 @@ uint Bot::GetCooldownEndTime(const Message &message)
 
 void Bot::Update(const uint diff)
 {
-    foreach(Series* series, lSeries_m)
+    foreach(Series* series, sSeries.GetMap())
         foreach(Episode* ep, series->GetAllEpisodes())
             if (ep->GetAir().timeFrom() < diff)
                 server_m->sendMessageToChannel("#soulwell", series->GetMainTitle()+": "+ep->GetJustAiredString());

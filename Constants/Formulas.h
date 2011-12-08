@@ -96,10 +96,6 @@ namespace Constant
     static QString se = "Season";
     static QString ep = "Episode";
     static QString air= "Aired:";
-
-    static int se_s = se.size();
-    static int ep_s = ep.size();
-    static int air_s= air.size();
 }
 
 #endif // FORMULAS_H

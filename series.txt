@@ -3,138 +3,92 @@
 #########
 create himym
 himym titles How I Met Your Mother, Jak jsem poznal vasi matku, HIMYM
-himym season add 7 -5
-himym s07e01 "The Best Man" "19.9.2011 20:00:00"
-himym s07e02 "The Naked Truth" "19.9.2011 20:00:00"
-himym s07e03 "Ducky Tie" "26.9.2011 20:00:00"
-himym s07e04 "The Stinson Missile Crisis" "3.10.2011 20:00:00"
+himym link http://www.tv.com/shows/how-i-met-your-mother/
+himym air 20:00:00 -5
 
-himym info The year is 2030. Ted Mosby is relaying the story of how he met his wife to his daughter and son. The story starts in the year 2005, when then twenty-seven year old architect Ted was spurred on to want to get married after lawyer Marshall Eriksen and kindergarten teacher Lily Aldrin, his best friends from their college days at Wesleyan and Marshall who was his roommate at the time, got engaged after nine years of dating each other. Ted's new quest in life was much to the dismay of his womanizing friend, Barney Stinson. But soon after Marshall and Lily's engagement, Ted believed that his life mate was going to be news reporter and aspiring news anchor Robin Scherbatsky, who, despite having had a romantic relationship with her after this time, ended up being who the kids know as their "Aunt" Robin. As Ted relays the story to his kids, the constants are that their Uncle Marshall
-himym season 7 info Sedma serie bude snad bezvadná
-himym s07e01 info While Barney prepares for his wedding to a mystery bride, he and Ted reminisce about Punchy's wedding, including when Marshall and Lily announced they were having a baby. Meanwhile, Robin considers telling Barney she has feelings for him
-himym s07e02 info Immediately after his drunken spree at Punchy's wedding, Marshall learns that he is one step away from landing his dream job working in environmental lawyer Garrison Cootes' law firm. That last step is for them to do a background check to make sure that there are no unseemly skeletons in his closet. Feeling that that drunken spree may have cost him the job and thus vowing never to get drunk again, Marshall does his own Internet search to find any of those skeletons. He finds one video, posted by a college colleague named Peter Durkenson, of Marshall doing a supposed fraternity prank called Beercules. Believing that video could cost him his dream job, Marshall tries to track down Peter to get him to remove the video. Finding a seemingly still immature Peter may get Marshall into even more trouble. Meanwhile, Nora finally agrees to meet with Barney, who tries to do whatever he can to make her believe he's a changed man, even if it takes a marathon in an all-night diner. And Ted decides to start dating again, using his cover story in New York magazine as a come-on to pick-up women. He manages to land two women who are potential girlfriend candidates. He has to figure out which he will take to the prestigious (at least in his own mind) architect's ball to seal the deal. If Robin has her way, she will be the one he takes to the ball if only so that she can meet Lenny Kravitz, who Ted mentions always attends the event.
-himym s07e03 info After Ted runs into an old girlfriend, he tries to make amends with her since he cheated during their relationship. Meanwhile, Marshall and Lily make a bet with Barney that could force him to wear Marshall's ducky tie.
-himym s07e04 info After Robin assaults a girl who is out to ruin Barney's relationship, she is forced to begin court-mandated therapy sessions. Meanwhile, Ted gets too involved in Lily's pregnancy.
 
 ########
 # TBBT #
 ########
 create tbbt
 tbbt titles The Big Bang Theory, Teorie Velkeho Tresku, TBBT
-tbbt season add 5 -5
-tbbt s05e01 "The Skank Reflex Analysis" "22.9.2011 20:00:00"
-tbbt s05e02 "The Infestation Hypothesis" "22.9.2011 20:00:00"
-tbbt s05e03 "The Pulled Groin Extrapolation" "29.9.2011 20:00:00"
-tbbt s05e04 "The Wiggly Finger Catalyst" "6.10.2011 20:00:00"
-tbbt s05e05 "The Russian Rocket Reaction" "13.10.2011 20:00:00"
+tbbt link http://www.tv.com/shows/the-big-bang-theory/
+tbbt air 20:00:00 -5
 
 ################
 # Breaking Bad #
 ################
 create breaking_bad
 breaking_bad titles Breaking Bad, Pernikovy tata
-breaking_bad season add 4 -5
-breaking_bad s04e01 "Box Cutter" "17.7.2011 22:00:00"
-breaking_bad s04e02 "Thirty-Eight Snub" "24.7.2011 22:00:00"
-breaking_bad s04e03 "Open House" "31.7.2011 22:00:00"
-breaking_bad s04e04 "Bullet Points" "7.8.2011 22:00:00"
-breaking_bad s04e05 "Shotgun" "14.8.2011 22:00:00"
-breaking_bad s04e06 "Cornered" "21.8.2011 22:00:00"
-breaking_bad s04e07 "Problem Dog" "28.8.2011 22:00:00"
-breaking_bad s04e08 "Hermanos" "4.9.2011 22:00:00"
-breaking_bad s04e09 "Bug" "11.9.2011 22:00:00"
-breaking_bad s04e10 "Salud" "18.9.2011 22:00:00"
-breaking_bad s04e11 "Crawl Space" "25.9.2011 22:00:00"
-breaking_bad s04e12 "End Times" "2.10.2011 22:00:00"
-breaking_bad s04e13 "Face Off" "9.10.2011 22:00:00"
+breaking_bad link http://www.tv.com/shows/breaking-bad/
+breaking_bad air 22:00:00 -5
+
 
 ##########
 # Castle #
 ##########
 create castle
 castle titles Castle, Castle na zabiti
-castle season add 4 -5
-castle s04e01 "Box Cutter" "19.9.2011 22:01:00"
-castle s04e02 "Heroes and Villains" "26.9.2011 22:01:00"
-castle s04e03 "Head Case" "3.10.2011 22:01:00"
-castle s04e04 "Kick the Ballistics" "10.10.2011 22:01:00"
-castle s04e05 "Eye of the Beholder" "17.10.2011 22:01:00"
-castle s04e06 "Demons" "24.10.2011 22:01:00"
+castle link http://www.tv.com/shows/castle/
+castle air 22:01:00 -5
+
 
 #########
 # House #
 #########
 create house
 house titles House M.D., Dr. House
-house season add 8 -5
-house s08e01 "Twenty Vicodin" "3.10.2011 21:00:00"
-house s08e02 "Transplant" "10.10.2011 21:00:00"
-house s08e03 "Charity Case" "17.10.2011 21:00:00"
-house s08e04 "Risky Business" "31.10.2011 21:00:00"
-house s08e05 "The Confession" "7.11.2011 21:00:00"
+house link http://www.tv.com/shows/house/
+house air 21:00:00 -5
+
 
 #########
 # Chuck #
 #########
 create chuck
 chuck titles Chuck
-chuck season add 5 -5
-chuck s05e01 "Chuck vs. the Zoom" "21.10.2011 20:00:00"
-chuck s05e02 "Chuck vs. the Bearded Bandit" "28.10.2011 20:00:00"
-chuck s05e03 "Chuck vs. the Frosted Tips" "4.11.2011 20:00:00"
-chuck s05e04 "Chuck vs. the Business Trip" "11.11.2011 20:00:00"
-chuck s05e05 "Chuck vs. the Hack Off" "18.11.2011 20:00:00"
-chuck s05e06 "Chuck Versus the Curse" "2.12.2011 20:00:00"
+chuck link http://www.tv.com/shows/chuck/
+chuck air 20:00:00 -5
 
 ##########
 # Dexter #
 ##########
 create dexter
 dexter titles Dexter
-dexter season add 6 -5
-dexter s06e01 "Those Kinds of Things" "2.10.2011 21:00:00"
-dexter s06e02 " Once Upon a Time..." "9.10.2011 21:00:00"
-dexter s06e03 "Smokey and the Bandit" "16.10.2011 21:00:00"
-dexter s06e04 "A Horse of a Different Color" "23.10.2011 21:00:00"
-dexter s06e05 "The Angel of Death" "30.10.2011 21:00:00"
-dexter s06e06 "Just Let Go" "6.11.2011 21:00:00"
-dexter s06e07 "Nebraska" "13.11.2011 21:00:00"
-dexter s06e08 "Sins of Omission" "20.11.2011 21:00:00"
-dexter s06e09 "Get Geller" "27.11.2011 21:00:00"
-dexter s06e10 "The Devil's Errand" "4.12.2011 21:00:00"
-dexter s06e11 "Episode #6.11" "11.12.2011 21:00:00"
-dexter s06e12 "Electric Chair" "8.1.2012 21:00:00"
+dexter link http://www.tv.com/shows/dexter/
+dexter air 21:00:00 -5
+
 
 ###################
 # Game of Thrones #
 ###################
 create got
 got titles Game of Thrones, Hra o truny
-got season add 2
+got link http://www.tv.com/shows/game-of-thrones/
+
 
 ############
 # Futurama #
 ############
 create futurama
 futurama titles Futurama
-futurama season add 7
+futurama link http://www.tv.com/shows/futurama/
+
 
 ################
 # The Simpsons #
 ################
 create simpsons
 simpsons titles The Simpsons, Simpsonovi
-simpsons season add 23
-simpsons s23e01 "The Falcon and the D'Ohman" "25.9.2011 20:00:00"
-simpsons s23e02 "Bart Stops to Smell the Roosevelts" "2.10.2011 20:00:00"
-simpsons s23e03 "The Food Wife" "9.10.2011 20:00:00"
+simpsons link http://www.tv.com/shows/the-simpsons/
+
 
 ###########
 # 30 rock #
 ###########
 create 30rock
-30rock titles 30 Rock
-#30rock season add 5
+#30rock titles 30 Rock, test
+30rock link http://www.tv.com/shows/30-rock/
 
 
 ##########
@@ -142,56 +96,48 @@ create 30rock
 ##########
 create alphas
 alphas titles Alphas 
-alphas season add 1
-alphas s01e10 "The Unusual Suspects" "19.9.2011 22:00:00"
-alphas s01e11 "Original Sin" "26.9.2011 22:00:00"
+alphas link http://www.tv.com/shows/alphas/
 
 ###################
 # Californication #
 ###################
 create californication
-californication titles Californication 
-californication season add 5
-#californication s23e01 "The Falcon and the D'Ohman" "25.9.2011 20:00:00"
+californication titles Californication
+californication link http://www.tv.com/shows/californication/
+
 
 ##############
 # Doctor Who #
 ##############
 create drwho
 drwho titles Doctor Who
-#drwho season add 23
-#drwho s23e01 "The Falcon and the D'Ohman" "25.9.2011 20:00:00"
+drwho link http://www.tv.com/shows/doctor-who-2005/
 
 ###########
 # Misfits #
 ###########
 create misfits
 misfits titles Misfits
-misfits season add 3
-#misfits s23e01 "The Falcon and the D'Ohman" "25.9.2011 20:00:00"
+misfits link http://www.tv.com/shows/misfits/
+
 
 ##############
 # South Park #
 ##############
 create south_park
 south_park titles South Park
-#south_park season add 23
-#south_park s23e01 "The Falcon and the D'Ohman" "25.9.2011 20:00:00"
+south_park link http://www.tv.com/shows/south-park/
 
 #############
 # Torchwood #
 #############
 create torchwood
-torchwood titles Torchwood 
-#torchwood season add 23
-#torchwood s23e01 "The Falcon and the D'Ohman" "25.9.2011 20:00:00"
+torchwood titles Torchwood
+torchwood link http://www.tv.com/shows/torchwood/
 
 #########
 # Weeds #
 #########
 create weeds
 weeds titles Weeds, Trava
-weeds season add 7
-#add remaining
-weeds s07e12 "Qualitative Spatial Reasoning" "19.9.2011 22:00:00"
-weeds s07e13 "Do Her/Don't Do He" "26.9.2011 22:00:00"
+weeds link http://www.tv.com/shows/weeds/

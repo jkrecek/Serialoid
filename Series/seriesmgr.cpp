@@ -83,15 +83,7 @@ void SeriesMgr::Load(QString _series, QString _error)
             if (setting[2] == "add")
             {
                 if (setting.size() == 4)
-                {
-                    SeasonMap& seaM = series->GetSeasons();
-                    uint seasonId = setting.value(3).toUInt();
-                    if (!seasonId || series->GetSeason(seasonId))
-                        continue;
-
-                    Season* s = new Season(seasonId);
-                    seaM.insert(seasonId, s);
-                }
+                    series->GetOrAddSeason(setting.value(3).toUInt());
                 else
                 {
                     writeError("Command 'season add' for series codenamed '"+pFirst+"' has wrong number of parameters (has "+QString::number(setting.size())+" instead of 4 or 5)");
@@ -140,22 +132,16 @@ void SeriesMgr::Load(QString _series, QString _error)
                     continue;
                 }
 
-                EpisodeMap& episodes = season->GetEpisodes();
-                Episode* episode = season->GetEpisode(epO.episode);
-                if (!episode)
+                Episode * episode = series->GetOrAddEpisode(epO);
+                if (setting.value(2) == "info")
+                    episode->SetInfo(line.mid(line.indexOf(setting[3])));
+                else
                 {
                     QStringList splitList = line.split("\"");
                     QStringList stampPart = splitList[3].split(" ");
 
-                    episode = new Episode(epO);
                     episode->SetName(splitList[1]);
                     episode->SetAir(Timestamp(stampPart[0], stampPart[1], series->GetDailyAir().getGMT()));
-                    episodes[epO.episode] = episode;
-                }
-                else
-                {
-                    if (setting[2] == "info")
-                        episode->SetInfo(line.mid(line.indexOf(setting[3])));
                 }
             }
         }

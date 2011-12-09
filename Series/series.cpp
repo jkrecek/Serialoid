@@ -36,6 +36,26 @@ Episode* Series::GetEpisodeByOrder(EpisodeOrder order) const
     return NULL;
 }
 
+Season* Series::GetOrAddSeason(uint Id)
+{
+    if (!Id)
+        return NULL;
+
+    Season * _s = lSeasons_m.value(Id);
+    if (!_s)
+    {
+        _s = new Season(Id);
+        lSeasons_m.insert(Id, _s);
+    }
+
+    return _s;
+}
+
+Episode* Series::GetOrAddEpisode(EpisodeOrder epOrder)
+{
+    return epOrder.isSet() ? GetOrAddSeason(epOrder.season)->GetOrAddEpisode(epOrder) : NULL;
+}
+
 Episode* Series::GetNextEpisode() const
 {
     if (!lSeasons_m.isEmpty())

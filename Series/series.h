@@ -33,7 +33,7 @@ class Series
         void AddLink(QString _l);
         void SetAir(QString unix, int gmt_diff);
 
-        SeasonMap& GetSeasons()               { return lSeasons_m; }
+        const SeasonMap& GetSeasons()   const { return lSeasons_m; }
         QStringList& GetTitles()              { return seriesTitles_m; }
         Season* GetSeason(uint Id)      const { return lSeasons_m.value(Id); }
         QString GetMainTitle()          const { return seriesTitles_m.empty() ? seriesName_m : seriesTitles_m.first(); }
@@ -42,9 +42,11 @@ class Series
         LinkList GetLinks()             const { return links_m; }
         Timestamp GetDailyAir()         const { return airHour_m; }
 
-        Episode* GetEpisodeByOrder(EpisodeOrder order) const;
+        Episode* GetEpisodeByOrder(EpisodeOrder epOrder) const;
         Episode* GetNextEpisode() const;
         EpisodeList GetAllEpisodes();
+        Episode* GetOrAddEpisode(EpisodeOrder epOrder);
+        Season* GetOrAddSeason(uint Id);
 
         /***********************/
         /***  PARSING START  ***/

@@ -38,4 +38,6 @@ SOURCES += main.cpp \
     Profile/profilemgr.cpp \
     Series/series.cpp \
     Series/seriesmgr.cpp \
+    Series/seriesparser.cpp \
+    Series/seriesparserhelper.cpp \
     WebParser/parsermgr.cpp

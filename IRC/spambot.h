@@ -32,10 +32,10 @@ class Bot : public QObject
         QList<User*> Users;
 
     protected:
-        void HandleTimeComparison(const Message& message);
-        void HandleSeriesCommands(const Message& message);
-        void HandleProfileCommands(const Message& message);
-        void HandleHashCommand(const Message& message);
+        bool HandleTimeComparison(const Message& message);
+        bool HandleSeriesCommands(const Message& message);
+        bool HandleProfileCommands(const Message& message);
+        bool HandleHashCommand(const Message& message);
 
         uint GetCooldownEndTime(const Message& message);
 

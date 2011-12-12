@@ -54,22 +54,29 @@ void Bot::handleReceivedMessage(const Message& message)
             server_m->sendNoticeToUser(message.senderNick(), "I'm on cooldown for next "+Timestamp(endtime).getTo());
         else
         {
+            bool noErrorOccured;
             switch(command_m->GetCommandOnPos(1))
             {
                 case COMMAND_COMPARE:
-                    HandleTimeComparison(message);
+                    noErrorOccured = HandleTimeComparison(message);
                     break;
                 case COMMAND_SERIES:
-                    HandleSeriesCommands(message);
+                    noErrorOccured = HandleSeriesCommands(message);
                     break;
                 case COMMAND_PROFILE:
-                    HandleProfileCommands(message);
+                    noErrorOccured = HandleProfileCommands(message);
                     break;
                 case COMMAND_HASH:
-                    HandleHashCommand(message);
+                    noErrorOccured = HandleHashCommand(message);
                     break;
                 default:
                     break;
+            }
+
+            if (!noErrorOccured)
+            {
+                server_m->sendMessageToChannel(message.senderChannel(), "Sorry, Incorrect syntax");
+                muteMap_m[message.senderChannel()] = 0;
             }
         }
     }
@@ -86,19 +93,23 @@ void Bot::handleReceivedMessage(const Message& message)
     }
 }
 
-void Bot::HandleTimeComparison(const Message &message)
+bool Bot::HandleTimeComparison(const Message &message)
 {
     Timestamp stamp(command_m->GetMessagePart(2), command_m->GetMessagePart(3));
+    if (!stamp.isCorrect())
+        return false;
+
     server_m->sendMessageToChannel(message.senderChannel(), "Unix time for timestamp "+stamp.write(FORMAT_TIME_DATE)+" is "+stamp.write(FORMAT_UNIX)+" at actual time ");
     server_m->sendMessageToChannel(message.senderChannel(), "Current timestamp is UNIX:"+Timestamp().write(FORMAT_UNIX)+" STAMP:"+Timestamp().write(FORMAT_TIME_DATE));
+    return true;
 }
 
-void Bot::HandleSeriesCommands(const Message &message)
+bool Bot::HandleSeriesCommands(const Message &message)
 {
     if (parser_m)       // if has valid pointer to parser then bot is currently parsing, disallow accesing to series
     {
         server_m->sendMessageToChannel(message.senderChannel(), "Sorry, I'm currently parsing, please ask me when I'm finished");
-        return;
+        return true;
     }
 
     switch(command_m->GetCommandOnPos(2))
@@ -108,7 +119,7 @@ void Bot::HandleSeriesCommands(const Message &message)
             if (sSeries.GetMap().empty())
             {
                 server_m->sendMessageToChannel(message.senderChannel(), "No series found, please check your series.txt file.");
-                break;
+                return true;
             }
 
             QString known;
@@ -121,14 +132,15 @@ void Bot::HandleSeriesCommands(const Message &message)
             }
             server_m->sendMessageToChannel(message.senderChannel(), ".:Printing all known series ( format Name(codename) ):.");
             server_m->sendMessageToChannel(message.senderChannel(), known);
-            break;
+            return true;
         }
         case COMMAND_RELOAD:
         {
             sSeries.Load();
             server_m->sendMessageToChannel(message.senderChannel(), "Series reloaded succesfully, start parsing now");
             parser_m = new ParserMgr();
-            break;
+            connect(parser_m, SIGNAL(allParsed()), this, SLOT(parsingComplete()));
+            return true;
         }
         case COMMAND_TODAY:
         {
@@ -149,7 +161,7 @@ void Bot::HandleSeriesCommands(const Message &message)
             }
             if (!found)
                 server_m->sendMessageToChannel(message.senderChannel(), "No series is about to be aired today!");
-            break;
+            return true;
         }
         case COMMAND_TOMORROW:
         {
@@ -170,7 +182,8 @@ void Bot::HandleSeriesCommands(const Message &message)
             }
             if (!found)
                 server_m->sendMessageToChannel(message.senderChannel(), "No series is about to be aired tomorrow!");
-            break;
+
+            return true;
         }
         case COMMAND_IS_SERIES:
         {
@@ -187,7 +200,7 @@ void Bot::HandleSeriesCommands(const Message &message)
                     else
                         server_m->sendMessageToChannel(message.senderChannel(), "No more episodes to be aired for series "+series->GetMainTitle()+"!");
 
-                    break;
+                    return true;
                 }
                 case COMMAND_INFO:
                 {
@@ -199,7 +212,7 @@ void Bot::HandleSeriesCommands(const Message &message)
                     else
                         server_m->sendMessageToChannel(message.senderChannel(), "No info for series "+series->GetMainTitle()+" found!");
 
-                    break;
+                    return true;
                 }
                 case COMMAND_TITLES:
                 {
@@ -209,7 +222,7 @@ void Bot::HandleSeriesCommands(const Message &message)
                     else
                         server_m->sendMessageToChannel(message.senderChannel(), "Series is known only by its codename '"+series->GetName()+"'");
 
-                    break;
+                    return true;
                 }
                 case COMMAND_EP_ORDER:
                 {
@@ -217,53 +230,62 @@ void Bot::HandleSeriesCommands(const Message &message)
                     if (!epOrder.isSet())
                     {
                         server_m->sendMessageToChannel(message.senderChannel(), "SOMETHING WENT TERRIBLY WRONG!");
-                        break;
+                        return true;
                     }
 
                     if (Episode* episode = series->GetEpisodeByOrder(epOrder))
                     {
                         server_m->sendMessageToChannel(message.senderChannel(), episode->GetAirString());
-                        if (command_m->GetCommandOnPos(4) == COMMAND_INFO)
+                        switch(command_m->GetCommandOnPos(4))
                         {
-                            if (!episode->GetInfo().isEmpty())
+                            case COMMAND_INFO:
                             {
-                                server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
-                                server_m->sendMessageToUser(message.senderNick(), episode->GetInfo());
-                                server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
+                                if (!episode->GetInfo().isEmpty())
+                                {
+                                    server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
+                                    server_m->sendMessageToUser(message.senderNick(), episode->GetInfo());
+                                    server_m->sendMessageToUser(message.senderNick(), "---!!! SPOILER ALERT !!!---");
+                                }
+                                else
+                                    server_m->sendMessageToUser(message.senderNick(), "No info for episode "+epOrder.GetNormalLook()+" found!");
+
+                                return true;
                             }
-                            else
-                                server_m->sendMessageToUser(message.senderNick(), "No info for episode "+epOrder.GetNormalLook()+" found!");
-                        }
-                        if (command_m->GetCommandOnPos(4) == COMMAND_RATING)
-                        {
-                            const float& rating = episode->GetRating();
-                            if (rating)
-                                server_m->sendMessageToChannel(message.senderChannel(), "Episode rating according to TV.com is "+QString::number(rating));
-                            else
-                                server_m->sendMessageToChannel(message.senderChannel(), "Episode rating not found");
+                            case COMMAND_RATING:
+                            {
+                                const float& rating = episode->GetRating();
+                                if (rating)
+                                    server_m->sendMessageToChannel(message.senderChannel(), "Episode rating according to TV.com is "+QString::number(rating));
+                                else
+                                    server_m->sendMessageToChannel(message.senderChannel(), "Episode rating not found");
+
+                                return true;
+                            }
+                            default:
+                                return true;
                         }
                     }
                     else
                         server_m->sendMessageToChannel(message.senderChannel(), "Episode "+epOrder.GetNormalLook()+" not found!");
 
-                    break;
+                    return true;
                 }
                 default:
-                    break;
+                    return false;
             }
-            break;
+            return false;
         }
         default:
-            break;
+            return false;
     }
 }
 
-void Bot::HandleProfileCommands(const Message &message)
+bool Bot::HandleProfileCommands(const Message &message)
 {
     if (parser_m)       // if has valid pointer to parser then bot is currently parsing, disallow accesing to series
     {
         server_m->sendMessageToChannel(message.senderChannel(), "Sorry, I'm currently parsing, please ask me when I'm finished");
-        return;
+        return true;
     }
 
     switch(command_m->GetCommandOnPos(2))
@@ -274,12 +296,12 @@ void Bot::HandleProfileCommands(const Message &message)
             if (profileName.isEmpty())
             {
                 server_m->sendMessageToChannel(message.senderChannel(), "Profile name cannot be empty!");
-                return;
+                return true;
             }
             if (sProfile.isNameForbidden(profileName))
             {
                 server_m->sendMessageToChannel(message.senderChannel(), "You cannot use profile name "+profileName+". Such name is forbidden!");
-                return;
+                return true;
             }
             Profile* profile = sProfile.GetProfile(profileName);
             if (!profile)
@@ -301,7 +323,7 @@ void Bot::HandleProfileCommands(const Message &message)
             else
                 server_m->sendMessageToChannel(message.senderChannel(), "Profile already exists!");
 
-            break;
+            return true;
         }
         case COMMAND_IS_PROFILE:
         {
@@ -314,7 +336,7 @@ void Bot::HandleProfileCommands(const Message &message)
                         if (Episode* ep = series->GetNextEpisode())
                             server_m->sendMessageToChannel(message.senderChannel(), series->GetMainTitle()+": "+ep->GetAirString());
 
-                    break;
+                    return true;
                 }
                 case COMMAND_TODAY:
                 {
@@ -335,7 +357,8 @@ void Bot::HandleProfileCommands(const Message &message)
                     }
                     if (!found)
                         server_m->sendMessageToChannel(message.senderChannel(), "None of your favorite series is about to be aired today!");
-                    break;
+
+                    return true;
                 }
                 case COMMAND_TOMORROW:
                 {
@@ -356,7 +379,8 @@ void Bot::HandleProfileCommands(const Message &message)
                     }
                     if (!found)
                         server_m->sendMessageToChannel(message.senderChannel(), "None of your favorite series is about to be aired tommorow!");
-                    break;
+
+                    return true;
                 }
                 case COMMAND_PASS:
                 {
@@ -367,7 +391,7 @@ void Bot::HandleProfileCommands(const Message &message)
                             if (!profile->GetPassHash().isEmpty())
                             {
                                 server_m->sendMessageToChannel(message.senderChannel(), "Password already set, if you wish to change it please type 'profile "+profile->GetName()+" pass old new'");
-                                break;
+                                return true;
                             }
                             QString pass = command_m->GetMessagePart(4);
                             if (!pass.isEmpty())
@@ -382,13 +406,13 @@ void Bot::HandleProfileCommands(const Message &message)
                             if (profile->GetPassHash().isEmpty())
                             {
                                 server_m->sendMessageToChannel(message.senderChannel(), "Cannot change password when none is set!");
-                                return;
+                                return true;
                             }
 
                             if (!profile->IsPassCorrect(command_m->GetMessagePart(4)))
                             {
                                 server_m->sendMessageToChannel(message.senderChannel(), "Wrong password!");
-                                return;
+                                return true;
                             }
 
                             QString pass = command_m->GetMessagePart(5);
@@ -402,25 +426,25 @@ void Bot::HandleProfileCommands(const Message &message)
                         default:
                         {
                             server_m->sendMessageToChannel(message.senderChannel(), "Command 'profile "+profile->GetName()+" pass' have to have 4 or 5 arguments!");
-                            break;
+                            return true;
                         }
                     }
                     sProfile.Save();
-                    break;
+                    return true;
                 }
                 case COMMAND_EDIT:
                 {
                     if (!profile->IsPassCorrect(command_m->GetMessagePart(4)))
                     {
                         server_m->sendMessageToChannel(message.senderChannel(), "Wrong password!");
-                        return;
+                        return true;
                     }
 
                     QString seriesStart = command_m->GetMessagePart(5);
                     if (seriesStart.isEmpty())
                     {
                         server_m->sendMessageToChannel(message.senderChannel(), "If you wish to change series in your profile, you have to enter new ones!");
-                        break;
+                        return true;
                     }
 
                     profile->SetSeries(message.content().mid(message.content().indexOf(seriesStart)));
@@ -434,24 +458,25 @@ void Bot::HandleProfileCommands(const Message &message)
                         s.append(series->GetMainTitle()+"("+series->GetName()+")");
                     }
                     server_m->sendMessageToChannel(message.senderChannel(), "Succesfully edited profile '"+profile->GetName()+"' containing series: "+s);
-                    break;
+                    return true;
                 }
                 default:
-                    break;
+                    return false;
             }
-            break;
+            return false;
         }
         default:
-            break;
+            return false;
     }
 }
 
-void Bot::HandleHashCommand(const Message &message)
+bool Bot::HandleHashCommand(const Message &message)
 {
     if (command_m->GetSize() != 2)
-        return;
+        return false;
 
     server_m->sendMessageToChannel(message.senderChannel(), getHashFor(message.content().mid(message.content().indexOf(" "))));
+    return true;
 }
 
 uint Bot::GetCooldownEndTime(const Message &message)

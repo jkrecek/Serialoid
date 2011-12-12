@@ -141,3 +141,11 @@ torchwood link http://www.tv.com/shows/torchwood/
 create weeds
 weeds titles Weeds, Trava
 weeds link http://www.tv.com/shows/weeds/
+
+####################
+# Boardwalk Empire #
+####################
+create boardwalk_empire
+boardwalk_empire titles Boardwalk Empire
+boardwalk_empire link http://www.tv.com/shows/boardwalk-empire/
+boardwalk_empire air 22:00:00 -5

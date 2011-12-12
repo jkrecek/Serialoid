@@ -31,7 +31,7 @@ class Series
         void SetInfo(QString info);
         void SetTitles(QStringList l);
         void AddLink(QString _l);
-        void SetAir(QString unix, int gmt_diff);
+        void SetAir(QString unix_time, int gmt_diff);
 
         const SeasonMap& GetSeasons()   const { return lSeasons_m; }
         QStringList& GetTitles()              { return seriesTitles_m; }

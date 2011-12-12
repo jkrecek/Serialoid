@@ -22,9 +22,9 @@ void Series::AddLink(QString _l)
     links_m.push_back(_l);
 }
 
-void Series::SetAir(QString unix, int gmt_diff)
+void Series::SetAir(QString unix_time, int gmt_diff)
 {
-    airHour_m = Timestamp("0.0.0", unix, gmt_diff);
+    airHour_m = Timestamp("0.0.0", unix_time, gmt_diff);
 }
 
 Episode* Series::GetEpisodeByOrder(EpisodeOrder order) const

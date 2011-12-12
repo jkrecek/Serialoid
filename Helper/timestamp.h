@@ -3,6 +3,7 @@
 
 #include <QStringList>
 #include <time.h>
+#include <climits>
 #include "Formulas.h"
 
 #define now_time Timestamp().write(FORMAT_TIME)

@@ -14,9 +14,9 @@
 #include "user.h"
 #include "bottime.h"
 
-#define ROUTE_SERIES_FILE "C://series.txt"
-#define ROUTE_PROFILE_FILE "C://profile.txt"
-#define ROUTE_ERROR_FILE "C://error.txt"
+#define ROUTE_SERIES_FILE "series.txt"
+#define ROUTE_PROFILE_FILE "profile.txt"
+#define ROUTE_ERROR_FILE "error.txt"
 
 Bot::Bot(QObject* parent) : QObject(parent)
 {

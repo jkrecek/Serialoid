@@ -96,10 +96,8 @@ QUrl ParserMgr::GetUrl(QString baseUrl, Details details)
             switch(site)
             {
                 case SITE_TV:
-                    url.append("season/?season=all");
-                    break;
                 case SITE_IMDB:
-                    url.append("episodes");
+                    url.append("episodes/");
                     break;
                 default:
                     break;

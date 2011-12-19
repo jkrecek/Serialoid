@@ -92,6 +92,7 @@ QString Series::GetTitleFromHead(const QByteArray& content, Site site)
             break;
         case SITE_TV:
             title.remove(" - TV.com", Qt::CaseInsensitive);
+            title.remove("Episode Guide", Qt::CaseInsensitive);
             if (title.contains("Season", Qt::CaseInsensitive))
                 title = title.left(title.indexOf("Season 1-", Qt::CaseInsensitive)).trimmed();
             break;

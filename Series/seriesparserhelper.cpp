@@ -101,3 +101,9 @@ QString Series::GetTitleFromHead(const QByteArray& content, Site site)
 
     return title.trimmed();
 }
+
+void Series::RemoveAllHtmlTags(QString &content)
+{
+    content.remove("<p>");
+    content.remove("</p>");
+}

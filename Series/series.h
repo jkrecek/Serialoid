@@ -54,6 +54,7 @@ class Series
         // basic helpers for parsing
         QByteArray GetSimpleContent(const QByteArray& content, QByteArray tag, int start = 0, bool forward = true);
         QByteArray GetAdvancedContent(const QByteArray& content, QByteArray tag, int& idx);
+        void RemoveAllHtmlTags(QString& content);
         //QByteArray GetAllTags(const QByteArray& content, QByteArray tag);
 
         QString GetTitleFromHead(const QByteArray& content, Site site);

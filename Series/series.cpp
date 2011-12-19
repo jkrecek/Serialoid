@@ -1,7 +1,7 @@
 #include "series.h"
 #include <QMap>
 
-Series::Series(QString name) : seriesName_m(name)
+Series::Series(QString name) : seriesName_m(name), airHour_m(86400)
 {
 }
 

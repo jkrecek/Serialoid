@@ -17,7 +17,7 @@ class CommandParser;
 
 typedef QMap<QString, uint> ChannelMuteMap;
 
-#define MUTE_TIME 15
+#define MUTE_TIME 5
 
 class Bot : public QObject
 {
